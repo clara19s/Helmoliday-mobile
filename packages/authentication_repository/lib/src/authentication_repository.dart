@@ -13,7 +13,7 @@ class AuthenticationResult {
   AuthenticationResult({required this.status, this.user});
 }
 
-const BASE_URL = 'https://10.0.2.2:44305';
+const BASE_URL = 'https://10.0.2.2:7112';
 
 class AuthenticationRepository {
   User? _user = null;
