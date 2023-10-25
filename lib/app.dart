@@ -1,7 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:helmoliday/home/view/home_screen.dart';
 import 'package:helmoliday/login/view/login_screen.dart';
-import 'package:helmoliday/profile/profile_screen.dart';
+import 'package:helmoliday/profile/view/profile_screen.dart';
 import 'package:helmoliday/splash/view/SplashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../authentication/bloc/authentication_bloc.dart';
+import '../../../authentication/bloc/authentication_bloc.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key});
