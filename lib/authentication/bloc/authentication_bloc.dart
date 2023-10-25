@@ -56,4 +56,10 @@ class AuthenticationBloc
   ) {
     _authenticationRepository.logOut();
   }
+  @override
+  Stream<AuthenticationState> mapEventToState(AuthenticationEvent event) async* {
+    if (event is AuthenticationLogoutRequested) {
+      yield const AuthenticationState.unauthenticated();
+    }
+  }
 }

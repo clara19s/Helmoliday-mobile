@@ -1,6 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:helmoliday/home/view/home_screen.dart';
 import 'package:helmoliday/login/view/login_screen.dart';
+import 'package:helmoliday/profile/profile_screen.dart';
 import 'package:helmoliday/splash/view/SplashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -97,6 +98,7 @@ class _AuthenticatedWrapperState extends State<AuthenticatedWrapper> {
 
   final _pages = [
     HomeScreen(),
+    ProfileScreen(),
     // TODO: Ajouter ici d'autres pages ici qu'on souhaite afficher dans la BottomNavigationBar
   ];
 
@@ -117,8 +119,8 @@ class _AuthenticatedWrapperState extends State<AuthenticatedWrapper> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Not home',
+            icon: Icon(Icons.account_circle),
+            label: 'Profile',
           ),
         ],
       ),

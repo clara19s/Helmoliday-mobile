@@ -20,3 +20,8 @@ class AuthenticationState extends Equatable {
   @override
   List<Object> get props => [status, user ?? ''];
 }
+class Unauthenticated extends AuthenticationState {
+  Unauthenticated.authenticated(super.user) : super.authenticated();
+}
+
+
