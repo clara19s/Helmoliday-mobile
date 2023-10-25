@@ -65,14 +65,16 @@ class _AppViewState extends State<AppView> {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
                 _navigator.pushAndRemoveUntil<void>(
-                  HomeScreen.route(),
+                  MaterialPageRoute(builder: (_) => AuthenticatedWrapper()),
                       (route) => false,
                 );
+                break;
               case AuthenticationStatus.unauthenticated:
                 _navigator.pushAndRemoveUntil<void>(
                   LoginScreen.route(),
                       (route) => false,
                 );
+                break;
               case AuthenticationStatus.unknown:
                 break;
             }
@@ -81,6 +83,45 @@ class _AppViewState extends State<AppView> {
         );
       },
       onGenerateRoute: (_) => SplashScreen.route(),
+    );
+  }
+}
+
+class AuthenticatedWrapper extends StatefulWidget {
+  @override
+  _AuthenticatedWrapperState createState() => _AuthenticatedWrapperState();
+}
+
+class _AuthenticatedWrapperState extends State<AuthenticatedWrapper> {
+  int _currentIndex = 0;
+
+  final _pages = [
+    HomeScreen(),
+    // TODO: Ajouter ici d'autres pages ici qu'on souhaite afficher dans la BottomNavigationBar
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _pages[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Not home',
+          ),
+        ],
+      ),
     );
   }
 }
