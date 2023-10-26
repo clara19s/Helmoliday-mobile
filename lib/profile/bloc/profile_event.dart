@@ -1,13 +1,48 @@
+part of 'profile_bloc.dart';
 
-class ProfileEvent {}
+sealed class ProfileEvent extends Equatable {
+  const ProfileEvent();
 
-class UpdateProfileEvent extends ProfileEvent {
-  get password => null;
+  @override
+  List<Object> get props => [];
+}
 
-  get email => null;
+final class ProfileFirstNameChanged extends ProfileEvent {
+  const ProfileFirstNameChanged(this.firstName);
 
-  get firstName => null;
+  final String firstName;
 
-  get lastName => null;
+  @override
+  List<Object> get props => [firstName];
+}
 
+final class ProfileLastNameChanged extends ProfileEvent {
+  const ProfileLastNameChanged(this.lastName);
+
+  final String lastName;
+
+  @override
+  List<Object> get props => [lastName];
+}
+
+final class ProfileEmailChanged extends ProfileEvent {
+  const ProfileEmailChanged(this.email);
+
+  final String email;
+
+  @override
+  List<Object> get props => [email];
+}
+
+final class ProfilePasswordChanged extends ProfileEvent {
+  const ProfilePasswordChanged(this.password);
+
+  final String password;
+
+  @override
+  List<Object> get props => [password];
+}
+
+final class ProfileSubmitted extends ProfileEvent {
+  const ProfileSubmitted();
 }

@@ -82,9 +82,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onPressed: () {
                   // Logique de déconnexion
                   context.read<AuthenticationBloc>().add(AuthenticationLogoutRequested());
-                  Navigator.of(context).pop(); // Retournez à l'écran de connexion
+                  //Navigator.of(context).pop(); // Retournez à l'écran de connexion
                 },
-                child: Text("Déconnexion"),
+                child: const Text("Déconnexion"),
               ),
             ],
           ),
