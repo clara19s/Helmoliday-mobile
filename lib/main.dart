@@ -1,20 +1,38 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:helmoliday/infrastructure/repository/auth_repository_impl.dart';
+import 'package:helmoliday/infrastructure/service/api_service_impl.dart';
+import 'package:helmoliday/repository/auth_repository.dart';
+import 'package:helmoliday/repository/holiday_repository.dart';
+import 'package:helmoliday/service/navigation_service.dart';
+import 'package:helmoliday/theme.dart';
+import 'package:provider/provider.dart';
 
-import 'app.dart';
+import 'infrastructure/repository/holiday_repository_impl.dart';
 
 void main() {
-  HttpOverrides.global = MyHttpOverrides(); // TODO: me supprimer
-  runApp(const App());
-}
+  WidgetsFlutterBinding.ensureInitialized();
+  final NavigationService navigationService = NavigationService();
+  final apiService = ApiServiceImpl();
+  final authRepository = AuthRepositoryImpl(apiService);
+  final holidayRepository = HolidayRepositoryImpl(apiService);
+  final theme = HelmolidayTheme.light();
 
-// TODO: me supprimer
-class MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
-  }
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider<AuthRepository>(
+          create: (_) => authRepository,
+        ),
+        Provider<HolidayRepository>(
+          create: (_) => holidayRepository,
+        ),
+      ],
+      child: MaterialApp.router(
+        title: 'HELMoliday',
+        debugShowCheckedModeBanner: false,
+        theme: theme,
+        routerConfig: navigationService.router,
+      ),
+    ),
+  );
 }
