@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:helmoliday/util/date_util.dart';
 
 class DateTimeRangePicker extends StatefulWidget {
-  const DateTimeRangePicker({super.key, required this.onChanged});
+  const DateTimeRangePicker({
+    super.key,
+    required this.onChanged,
+    this.initialDateRange,
+  });
 
+  final DateTimeRange? initialDateRange;
   final ValueChanged<DateTimeRange> onChanged;
 
   @override
@@ -14,16 +19,25 @@ class _DateTimeRangePickerState extends State<DateTimeRangePicker> {
   DateTimeRange? _dateRange;
   final _dateController = TextEditingController();
 
+  String get _dateRangeText => _dateRange != null
+      ? "Du ${DateUtility.toFormattedString(_dateRange!.start)} au ${DateUtility.toFormattedString(_dateRange!.end)}"
+      : "Choisissez une période";
+
+  @override
+  void initState() {
+    _dateRange = widget.initialDateRange;
+    _dateController.text = _dateRangeText;
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextField(
       onTap: () async {
         DateTimeRange? dateRange = await showDateRangePicker(
           context: context,
-          initialDateRange: _dateRange ?? DateTimeRange(
-            start: DateTime.now(),
-            end: DateTime.now(),
-          ),
+          initialDateRange: widget.initialDateRange,
           firstDate: DateTime.now(),
           lastDate: DateTime.now().add(const Duration(days: 365 * 10)),
         );
@@ -61,9 +75,9 @@ class _DateTimeRangePickerState extends State<DateTimeRangePicker> {
 
               // Mettez à jour le controller avec les dates et heures choisies
               setState(() {
-                _dateRange = DateTimeRange(start: startDateTime, end: endDateTime);
-                _dateController.text =
-                "Du ${DateUtility.toFormattedString(startDateTime)} au ${DateUtility.toFormattedString(endDateTime)}";
+                _dateRange =
+                    DateTimeRange(start: startDateTime, end: endDateTime);
+                _dateController.text = _dateRangeText;
                 widget.onChanged(_dateRange!);
               });
             }

@@ -33,8 +33,9 @@ class HolidayRepositoryImpl implements HolidayRepository {
   }
 
   @override
-  Future<void> updateHoliday(Holiday holiday) async {
-    _apiService.put("/holidays/${holiday.id}", data: holiday.toJson());
+  Future<void> updateHoliday(String holidayId, Holiday holiday) async {
+    var response = await _apiService.put("/holidays/$holidayId", data: holiday.toJson());
+    print(response.data);
   }
 
   @override

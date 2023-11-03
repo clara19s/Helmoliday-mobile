@@ -28,13 +28,20 @@ class HolidaysViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> goToHolidayDetails(String holidayId) {
-    _context.push('/holidays/details/$holidayId');
+  Future<void> goToHolidayDetails(String holidayId) async {
+    await _context.push('/holidays/details/$holidayId');
+    refreshData();
     return Future.value();
   }
 
   Future<void> deleteHoliday(String holidayId) async {
     await _holidaysRepository.deleteHoliday(holidayId);
     refreshData();
+  }
+
+  Future<void> goToCreateHoliday() async {
+    await _context.push('/holidays/add');
+    refreshData();
+    return Future.value();
   }
 }

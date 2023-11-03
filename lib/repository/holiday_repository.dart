@@ -9,7 +9,7 @@ abstract class HolidayRepository {
 
   Future<void> createHoliday(Holiday holiday);
 
-  Future<void> updateHoliday(Holiday holiday);
+  Future<void> updateHoliday(String holidayId, Holiday holiday);
 
   Future<void> deleteHoliday(String id);
 }

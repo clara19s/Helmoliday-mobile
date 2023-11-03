@@ -30,6 +30,8 @@ class ApiServiceImpl implements ApiService {
     String errorMessage = "Une erreur est survenue";
     int? errorCode;
 
+    print(error.response?.data);
+
     switch (error.type) {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:
@@ -85,8 +87,11 @@ class ApiServiceImpl implements ApiService {
   }
 
   @override
-  Future<Response> put(String s, {required Map<String, dynamic> data}) =>
-      _dio.put(s, data: data);
+  Future<Response> put(String s, {required Map<String, dynamic> data}) {
+    var response = _dio.put(s, data: data);
+    print(response);
+    return response;
+  }
 
   @override
   Future<Response> delete(String s) => _dio.delete(s);
