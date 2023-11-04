@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:helmoliday/widget/holiday/holiday_banner.dart';
 import 'package:provider/provider.dart';
 
@@ -89,7 +88,7 @@ class HolidayDetailScreen extends StatelessWidget {
                             HolidayBanner(
                               name: holiday!.name,
                               image:
-                              "https://picsum.photos/seed/${holiday.id}/300/300",
+                                  "https://picsum.photos/seed/${holiday.id}/300/300",
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(

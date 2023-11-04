@@ -45,14 +45,18 @@ class _DateTimeRangePickerState extends State<DateTimeRangePicker> {
         if (context.mounted && dateRange != null) {
           TimeOfDay? startTime = await showTimePicker(
             context: context,
-            initialTime: TimeOfDay.now(),
+            initialTime: _dateRange != null
+                ? TimeOfDay.fromDateTime(_dateRange!.start)
+                : TimeOfDay.now(),
             helpText: "Heure d'arrivée",
           );
 
           if (context.mounted && startTime != null) {
             TimeOfDay? endTime = await showTimePicker(
               context: context,
-              initialTime: TimeOfDay.now(),
+              initialTime: _dateRange != null
+                  ? TimeOfDay.fromDateTime(_dateRange!.end)
+                  : TimeOfDay.now(),
               helpText: "Heure de départ",
             );
 

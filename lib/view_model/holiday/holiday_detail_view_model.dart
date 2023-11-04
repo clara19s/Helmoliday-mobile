@@ -11,8 +11,6 @@ class HolidayDetailViewModel extends ChangeNotifier {
   final String id;
 
   late Future<Holiday> holiday;
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
 
   HolidayDetailViewModel(this._context, this.id) {
     _holidayRepository = _context.read<HolidayRepository>();

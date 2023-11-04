@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../repository/auth_repository.dart';
 import '../../view_model/auth/register_view_model.dart';
 import '../../widget/common/password_field.dart';
 

@@ -44,4 +44,10 @@ class HolidaysViewModel extends ChangeNotifier {
     refreshData();
     return Future.value();
   }
+
+  Future<void> goToEditHoliday(String holidayId) async {
+    await _context.push('/holidays/edit/$holidayId');
+    refreshData();
+    return Future.value();
+  }
 }
