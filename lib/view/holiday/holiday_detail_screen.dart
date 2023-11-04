@@ -89,6 +89,10 @@ class HolidayDetailScreen extends StatelessWidget {
                               name: holiday!.name,
                               image:
                                   "https://picsum.photos/seed/${holiday.id}/300/300",
+                              dateRange: DateTimeRange(
+                                start: holiday.startDate,
+                                end: holiday.endDate,
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(
