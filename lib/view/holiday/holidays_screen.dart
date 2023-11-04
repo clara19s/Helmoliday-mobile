@@ -62,6 +62,25 @@ class HolidayScreen extends StatelessWidget {
                                   ),
                                   title: Text(holiday.name),
                                   subtitle: Text(holiday.description),
+                                  trailing: PopupMenuButton(
+                                    itemBuilder: (context) => [
+                                      const PopupMenuItem(
+                                        value: 'edit',
+                                        child: Text('Modifier'),
+                                      ),
+                                      const PopupMenuItem(
+                                        value: 'delete',
+                                        child: Text('Supprimer'),
+                                      ),
+                                    ],
+                                    onSelected: (value) {
+                                      if (value == 'edit') {
+                                        viewModel.goToEditHoliday(holiday.id!);
+                                      } else if (value == 'delete') {
+                                        viewModel.deleteHoliday(holiday.id!);
+                                      }
+                                    },
+                                  ),
                                   onTap: () {
                                     viewModel.goToHolidayDetails(holiday.id!);
                                   },
