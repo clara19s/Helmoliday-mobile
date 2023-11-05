@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:helmoliday/theme.dart';
 import 'package:helmoliday/widget/holiday/holiday_banner.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +27,6 @@ class HolidayDetailScreen extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
-                  // set up the buttons
                   Widget cancelButton = TextButton(
                     child: const Text("Annuler"),
                     onPressed: () {
@@ -41,7 +41,6 @@ class HolidayDetailScreen extends StatelessWidget {
                     },
                   );
 
-                  // set up the AlertDialog
                   AlertDialog alert = AlertDialog(
                     title: const Text("Êtes-vous sûr ?"),
                     content: const Text(
@@ -52,7 +51,6 @@ class HolidayDetailScreen extends StatelessWidget {
                     ],
                   );
 
-                  // show the dialog
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
@@ -92,6 +90,20 @@ class HolidayDetailScreen extends StatelessWidget {
                               dateRange: DateTimeRange(
                                 start: holiday.startDate,
                                 end: holiday.endDate,
+                              ),
+                            ),
+                            // J'aimerai que le bouton puisse déborder de la moitié de sa taille sur le widget du dessus
+                            Ink(
+                              decoration: const ShapeDecoration(
+                                color: HelmolidayTheme.primaryColor,
+                                shape: CircleBorder(),
+                              ),
+                              child: IconButton(
+                                icon: const Icon(Icons.map),
+                                color: Colors.white,
+                                onPressed: () {
+                                  model.goToHolidayMap();
+                                },
                               ),
                             ),
                             Padding(

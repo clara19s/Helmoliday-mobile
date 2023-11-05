@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:helmoliday/view/holiday/edit_holiday_screen.dart';
+import 'package:helmoliday/view/holiday/holiday_map_screen.dart';
 import 'package:helmoliday/view/holiday/holidays_screen.dart';
 
 import '../view/auth/login_screen.dart';
@@ -55,6 +56,11 @@ class NavigationService {
               path: 'edit/:id',
               builder: (context, state) =>
                   EditHolidayScreen(id: state.pathParameters['id']!),
+            ),
+            GoRoute(
+              path: 'map/:id',
+              builder: (context, state) =>
+                  HolidayMapScreen(id: state.pathParameters['id']!),
             ),
           ]),
     ],

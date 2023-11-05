@@ -29,4 +29,8 @@ class HolidayDetailViewModel extends ChangeNotifier {
     _holidayRepository.deleteHoliday(id);
     _context.pop();
   }
+
+  void goToHolidayMap() {
+    _context.push('/holidays/map/$id');
+  }
 }

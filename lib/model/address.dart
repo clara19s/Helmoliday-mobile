@@ -30,4 +30,9 @@ class Address {
     'city': city,
     'country': country,
   };
+
+  @override
+  String toString() {
+    return '$street $streetNumber, $postalCode $city, $country';
+  }
 }
