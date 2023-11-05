@@ -15,4 +15,9 @@ class LatLng {
     'latitude': latitude,
     'longitude': longitude,
   };
+
+  @override
+  String toString() {
+    return '$latitude,$longitude';
+  }
 }

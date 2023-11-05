@@ -1,9 +1,7 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:helmoliday/model/lat_lng.dart';
+import 'package:helmoliday/model/lat_lng.dart' as helmoliday;
 
 import '../../service/location_service.dart';
 
@@ -32,49 +30,66 @@ class LocationServiceImpl implements LocationService {
   }
 
   @override
-  Future<LatLng?> getCurrentLocation() async {
+  Future<helmoliday.LatLng?> getCurrentLocation() async {
     final status = await _checkPermission();
     if (status != LocationServiceStatus.permissionGranted) {
       throw LocationServiceException('Permission not granted');
     }
 
     final position = await Geolocator.getCurrentPosition();
-    return LatLng(
+    return helmoliday.LatLng(
       latitude: position.latitude,
       longitude: position.longitude,
     );
   }
 
   @override
-  Future<LatLng?> getLocationFromQuery(String query) async {
+  Future<helmoliday.LatLng?> getLocationFromQuery(String query) async {
     var response = await _dio.get(
         "https://maps.googleapis.com/maps/api/geocode/json?address=${Uri.encodeFull(query)}&key=$googleApiKey");
     var json = response.data;
     if (json["status"] == "OK") {
       var location = json["results"][0]["geometry"]["location"];
-      return LatLng(latitude: location["lat"], longitude: location["lng"]);
+      return helmoliday.LatLng(latitude: location["lat"], longitude: location["lng"]);
     }
     return null;
   }
 
   @override
-  Future<List<LatLng>?> getPolylinePoints(
-      LatLng origin, LatLng destination) async {
-    var polylinePoints = PolylinePoints();
+  Future<Map<String, dynamic>> getDirections(
+      String origin, String destination) async {
+    var response = await _dio.get(
+        "https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&key=$googleApiKey");
+    var json = response.data;
 
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        googleApiKey,
-        PointLatLng(origin.latitude, origin.longitude),
-        PointLatLng(destination.latitude, destination.longitude));
+    var results = {
+      "bounds_ne": helmoliday.LatLng(
+        latitude: json["routes"][0]["bounds"]["northeast"]["lat"],
+        longitude: json["routes"][0]["bounds"]["northeast"]["lng"],
+      ),
+      "bounds_sw": helmoliday.LatLng(
+        latitude: json["routes"][0]["bounds"]["southwest"]["lat"],
+        longitude: json["routes"][0]["bounds"]["southwest"]["lng"],
+      ),
+      "distance": json["routes"][0]["legs"][0]["distance"]["text"],
+      "duration": Duration(
+        seconds: json["routes"][0]["legs"][0]["duration"]["value"],
+      ),
+      "start_location": helmoliday.LatLng(
+        latitude: json["routes"][0]["legs"][0]["start_location"]["lat"],
+        longitude: json["routes"][0]["legs"][0]["start_location"]["lng"],
+      ),
+      "end_location": helmoliday.LatLng(
+        latitude: json["routes"][0]["legs"][0]["end_location"]["lat"],
+        longitude: json["routes"][0]["legs"][0]["end_location"]["lng"],
+      ),
+      "polyline": PolylinePoints().decodePolyline(
+          json["routes"][0]["overview_polyline"]["points"])
+          .map((e) => helmoliday.LatLng(latitude: e.latitude, longitude: e.longitude)).toList(),
+    };
 
-    if (result.points.isNotEmpty) {
-      List<LatLng> polylineCoordinates = [];
-      for (var point in result.points) {
-        polylineCoordinates
-            .add(LatLng(latitude: point.latitude, longitude: point.longitude));
-      }
-      return polylineCoordinates;
-    }
-    return null;
+    print(results);
+
+    return results;
   }
 }

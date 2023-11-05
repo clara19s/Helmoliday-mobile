@@ -6,7 +6,7 @@ import 'package:helmoliday/view_model/holiday/holiday_map_view_model.dart';
 import 'package:provider/provider.dart';
 
 class HolidayMapScreen extends StatefulWidget {
-  const HolidayMapScreen({super.key, required this.id});
+  const HolidayMapScreen({Key? key, required this.id}) : super(key: key);
 
   final String id;
 
@@ -15,88 +15,124 @@ class HolidayMapScreen extends StatefulWidget {
 }
 
 class _HolidayMapScreenState extends State<HolidayMapScreen> {
-  final Completer<GoogleMapController> _controller =
-      Completer<GoogleMapController>();
+  Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
+
+  @override
+  void dispose() {
+    _controller = Completer();
+    super.dispose();
+  }
+
+  Future<void> updateCameraPosition(
+    LatLng ne,
+    LatLng sw,
+  ) async {
+    final GoogleMapController controller = await _controller.future;
+
+    controller.animateCamera(
+      CameraUpdate.newLatLngBounds(
+          LatLngBounds(northeast: ne, southwest: sw), 75),
+    );
+  }
+
+  // Attends que Google Maps soit prêt
+  // Fix temporaire de :
+  // - https://github.com/flutter/flutter/issues/25298
+  // - https://github.com/flutter/flutter/issues/29181
+  // Source : https://github.com/flutter/flutter/issues/29181#issuecomment-620917105
+  Future<void> waitForGoogleMap(GoogleMapController c) {
+    return c.getVisibleRegion().then((value) {
+      if (value.southwest.latitude != 0) {
+        return Future.value();
+      }
+
+      return Future.delayed(const Duration(milliseconds: 100))
+          .then((_) => waitForGoogleMap(c));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (nContext) => HolidayMapViewModel(context, widget.id),
-        child: Consumer<HolidayMapViewModel>(
-            builder: (context, model, child) => Scaffold(
-                  appBar: AppBar(
-                    title: const Text('Itinéraire'),
+      create: (nContext) => HolidayMapViewModel(context, widget.id),
+      child: Consumer<HolidayMapViewModel>(
+        builder: (context, viewModel, child) => Scaffold(
+          appBar: AppBar(
+            title: const Text('Itinéraire'),
+          ),
+          body: FutureBuilder(
+            future: viewModel.itineraryInfo,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return GoogleMap(
+                  mapType: MapType.normal,
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(snapshot.data!.boundsNe.latitude,
+                        snapshot.data!.boundsNe.longitude),
+                    zoom: 14.50,
                   ),
-                  body: FutureBuilder(
-                      future: model.polylineCoordinates,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          var polylineCoordinates =
-                              snapshot.data as List<LatLng>;
-                          return GoogleMap(
-                            mapType: MapType.normal,
-                            initialCameraPosition: CameraPosition(
-                              target: LatLng(
-                                  polylineCoordinates.first.latitude,
-                                  polylineCoordinates.first.longitude
-                              ),
-                              zoom: 14.50,
-                            ),
-                            onMapCreated: (GoogleMapController controller) {
-                              _controller.complete(controller);
-                            },
-                            myLocationEnabled: true,
-                            myLocationButtonEnabled: true,
-                            zoomControlsEnabled: false,
-                            cameraTargetBounds: CameraTargetBounds(
-                              LatLngBounds(
-                                southwest: LatLng(
-                                    polylineCoordinates.last.latitude,
-                                    polylineCoordinates.last.longitude),
-                                northeast: LatLng(
-                                    polylineCoordinates.first.latitude,
-                                    polylineCoordinates.first.longitude),
-                              ),
-                            ),
-                            markers: {
-                              Marker(
-                                markerId: const MarkerId('origin'),
-                                position: LatLng(
-                                    polylineCoordinates.first.latitude,
-                                    polylineCoordinates.first.longitude),
-                                infoWindow: const InfoWindow(title: 'Départ'),
-                              ),
-                              Marker(
-                                markerId: const MarkerId('destination'),
-                                position: LatLng(
-                                    polylineCoordinates.last.latitude,
-                                    polylineCoordinates.last.longitude),
-                                infoWindow: const InfoWindow(
-                                    title: 'Arrivée'),
-                              ),
-                            },
-                            polylines: {
-                              Polyline(
-                                polylineId: const PolylineId('route'),
-                                color: Colors.blue,
-                                width: 5,
-                                points: snapshot.data as List<LatLng>,
-                              ),
-                            },
-                            mapToolbarEnabled: false,
-                          );
-                        } else {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                      }),
-                  floatingActionButton: FloatingActionButton(
-                    onPressed: () {
-                      model.goToNavigation();
-                    },
-                    child: const Icon(Icons.navigation),
+                  onMapCreated: (GoogleMapController controller) {
+                    if (!_controller.isCompleted) {
+                      _controller.complete(controller);
+                    }
+                    waitForGoogleMap(controller).then((_) {
+                      updateCameraPosition(
+                        LatLng(snapshot.data!.boundsNe.latitude,
+                            snapshot.data!.boundsNe.longitude),
+                        LatLng(snapshot.data!.boundsSw.latitude,
+                            snapshot.data!.boundsSw.longitude),
+                      );
+                    });
+                  },
+                  cameraTargetBounds: CameraTargetBounds(
+                    LatLngBounds(
+                      northeast: LatLng(snapshot.data!.boundsNe.latitude,
+                          snapshot.data!.boundsNe.longitude),
+                      southwest: LatLng(snapshot.data!.boundsSw.latitude,
+                          snapshot.data!.boundsSw.longitude),
+                    ),
                   ),
-                )));
+                  markers: {
+                    Marker(
+                      markerId: const MarkerId('origin'),
+                      position: LatLng(snapshot.data!.startLocation.latitude,
+                          snapshot.data!.startLocation.longitude),
+                      infoWindow: const InfoWindow(title: 'Départ'),
+                    ),
+                    Marker(
+                      markerId: const MarkerId('destination'),
+                      position: LatLng(snapshot.data!.endLocation.latitude,
+                          snapshot.data!.endLocation.longitude),
+                      infoWindow: const InfoWindow(title: 'Arrivée'),
+                    ),
+                  },
+                  polylines: {
+                    Polyline(
+                        polylineId: const PolylineId('route'),
+                        color: Colors.blue,
+                        width: 5,
+                        points: snapshot.data!.polylineCoordinates
+                            .map((e) => LatLng(e.latitude, e.longitude))
+                            .toList()),
+                  },
+                  mapToolbarEnabled: false,
+                  zoomControlsEnabled: false,
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              viewModel.goToNavigation();
+            },
+            child: const Icon(Icons.navigation),
+          ),
+        ),
+      ),
+    );
   }
 }

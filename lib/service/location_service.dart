@@ -5,7 +5,7 @@ abstract class LocationService {
 
   Future<LatLng?> getLocationFromQuery(String query);
 
-  Future<List<LatLng>?> getPolylinePoints(LatLng origin, LatLng destination);
+  Future<Map<String, dynamic>> getDirections(String origin, String destination);
 }
 
 enum LocationServiceStatus {
