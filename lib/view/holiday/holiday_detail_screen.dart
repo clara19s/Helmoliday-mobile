@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:helmoliday/theme.dart';
+import 'package:helmoliday/view/activity/activity_list_screen.dart';
 import 'package:helmoliday/widget/holiday/holiday_banner.dart';
 import 'package:provider/provider.dart';
 
@@ -109,10 +110,12 @@ class HolidayDetailScreen extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 8, horizontal: 16),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.vertical,
+                                child:  Column (
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                children:
+                                [
                                   const Text(
                                     "Description",
                                     style: TextStyle(
@@ -122,9 +125,12 @@ class HolidayDetailScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(holiday.description),
+                                  ActivityListScreen(id: id)
                                 ],
+                                )
                               ),
                             ),
+                            const SizedBox(height: 64,)
                           ],
                         ),
                       )

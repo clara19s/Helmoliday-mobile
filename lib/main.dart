@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:helmoliday/infrastructure/repository/auth_repository_impl.dart';
 import 'package:helmoliday/infrastructure/service/api_service_impl.dart';
 import 'package:helmoliday/infrastructure/service/location_service_impl.dart';
+import 'package:helmoliday/repository/activity_repository.dart';
 import 'package:helmoliday/repository/auth_repository.dart';
 import 'package:helmoliday/repository/holiday_repository.dart';
 import 'package:helmoliday/service/location_service.dart';
@@ -9,6 +10,7 @@ import 'package:helmoliday/service/navigation_service.dart';
 import 'package:helmoliday/theme.dart';
 import 'package:provider/provider.dart';
 
+import 'infrastructure/repository/activity_repository_impl.dart';
 import 'infrastructure/repository/holiday_repository_impl.dart';
 
 void main() {
@@ -30,6 +32,9 @@ void main() {
         ),
         Provider<LocationService>(
           create: (_) => LocationServiceImpl(),
+        ),
+        Provider<ActivityRepository>(
+          create: (_) => ActivityRepositoryImp(apiService),
         ),
       ],
       child: MaterialApp.router(
