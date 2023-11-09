@@ -28,9 +28,9 @@ class ActivityRepositoryImp implements ActivityRepository{
 
 
   @override
-  Future<void> updateActivity(String activityId, Activity activity) {
-    // TODO: implement updateActivity
-    throw UnimplementedError();
+  Future<void> updateActivity(String activityId, Activity activity) async {
+    var response = await _apiService.put("/activities/$activityId", data: activity.toJson());
+    print(response.data);
   }
 
 }

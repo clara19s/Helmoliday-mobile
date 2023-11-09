@@ -21,18 +21,11 @@ class ActivityListViewModel extends ChangeNotifier{
     return _activityRepository.getActivities(id);
   }
 
-  void goToEditActivity() {
+  void goToEditActivity(String id) {
     _context.push('/activities/edit/$id');
   }
 
-  void removeActivity() async {
-    _activityRepository.deleteActivity(id);
-    _context.pop();
-  }
 
-  void goToActivityMap() {
-    _context.push('/activities/map/$id');
-  }
   void deleteActivity(String id) async {
     await _activityRepository.deleteActivity(id);
     activities = _getActivity(this.id);

@@ -37,15 +37,48 @@ class _ActivityListScreen extends State<ActivityListScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   var activity = activities[index];
-                  return ListTile(
+                  return  Dismissible(
+                      key: Key(activity.id!),
+                  direction: DismissDirection.endToStart,
+                  background: Container(
+                  color: Colors.red,
+                  child: const Align(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                  padding: EdgeInsets.only(right: 16),
+                  child: Icon(
+                  Icons.delete,
+                  color: Colors.white,
+                  ),
+                  ),
+                  ),
+                  ),
+                  onDismissed: (direction) {
+                  viewModel.deleteActivity(activity.id!);
+                  },
+                  child:ListTile(
                     title: Text(activity.name),
                     subtitle: Text(activity.description),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-
+                    trailing: PopupMenuButton(
+                      itemBuilder: (context) => [
+                        const PopupMenuItem(
+                          value: 'edit',
+                          child: Text('Modifier'),
+                        ),
+                        const PopupMenuItem(
+                          value: 'delete',
+                          child: Text('Supprimer'),
+                        ),
+                      ],
+                      onSelected: (value) {
+                        if (value == 'edit') {
+                          viewModel.goToEditActivity(activity.id!);
+                        } else if (value == 'delete') {
+                          viewModel.deleteActivity(activity.id!);
+                        }
                       },
                     ),
+                  ),
                   );
                 },
               );
