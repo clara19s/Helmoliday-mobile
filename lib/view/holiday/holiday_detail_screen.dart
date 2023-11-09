@@ -7,9 +7,10 @@ import 'package:provider/provider.dart';
 import '../../view_model/holiday/holiday_detail_view_model.dart';
 
 class HolidayDetailScreen extends StatelessWidget {
-  const HolidayDetailScreen({super.key, required this.id});
+   HolidayDetailScreen({super.key, required this.id});
 
   final String id;
+  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +62,123 @@ class HolidayDetailScreen extends StatelessWidget {
                 },
                 icon: const Icon(Icons.delete),
               ),
+              PopupMenuButton(
+                  itemBuilder: (context) => [
+                        const PopupMenuItem(
+                          value: "publier",
+                          child: Text("Publier"),
+                        ),
+                        const PopupMenuItem(
+                          value: "exporter",
+                          child: Text("Exporter"),
+                        ),
+                        const PopupMenuItem(
+                          value: "ajouterParticipant",
+                          child: Text("Ajouter des participants"),
+                        ),
+                        const PopupMenuItem(
+                          value: "quitter",
+                          child: Text("Quitter la période de vacance"),
+                        ),
+                      ],
+                  onSelected: (value) {
+                    if (value == "publier") {
+                      Widget cancelButton = TextButton(
+                        child: const Text("Annuler"),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      );
+                      Widget continueButton = TextButton(
+                        child: const Text("Confirmer"),
+                        onPressed: () {
+                          model.publishHoliday(model.id);
+                          Navigator.of(context).pop();
+                        },
+                      );
+                      AlertDialog alert = AlertDialog(
+                        title: const Text("Publier la periode de vacance"),
+                        content:  const Text("etes vous sur de vouloir publier la periode de vacance ?"),
+                        actions: [
+                          cancelButton,
+                          continueButton,
+                        ],
+                      );
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return alert;
+                        },
+                      );
+                    } else if (value == "exporter") {
+                      // TODO : export a impléméneter
+                    } else if (value == "ajouterParticipant") {
+
+                      Widget cancelButton = TextButton(
+                        child: const Text("Annuler"),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      );
+                      Widget continueButton = TextButton(
+                        child: const Text("Confirmer"),
+                        onPressed: () {
+                          model.addParticipant(_controller.text);
+                          Navigator.of(context).pop();
+                        },
+                      );
+                      AlertDialog alert = AlertDialog(
+                        title: const Text("Ajouter un participant"),
+                        content:  TextField(
+                          controller: _controller,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Email',
+
+                          ),
+                          ),
+                        actions: [
+                          cancelButton,
+                          continueButton,
+                        ],
+                      );
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return alert;
+                        },
+                      );
+                    } else if (value == "quitter") {
+
+                      Widget cancelButton = TextButton(
+                        child: const Text("Annuler"),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      );
+                      Widget continueButton = TextButton(
+                        child: const Text("Confirmer"),
+                        onPressed: () {
+                          model.exitHoliday();
+                          Navigator.of(context).pop();
+                        },
+                      );
+                      AlertDialog alert = AlertDialog(
+                        title: const Text("Quitter la periode de vacance"),
+                        content:  const Text("etes vous sur de vouloir quitter la periode de vacance ?"),
+                        actions: [
+                          cancelButton,
+                          continueButton,
+                        ],
+                      );
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return alert;
+                        },
+                      );
+                    }
+                  }),
             ],
           ),
           floatingActionButton: FloatingActionButton(
@@ -111,26 +229,49 @@ class HolidayDetailScreen extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(
                                   vertical: 8, horizontal: 16),
                               child: SingleChildScrollView(
-                                scrollDirection: Axis.vertical,
-                                child:  Column (
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                children:
-                                [
-                                  const Text(
-                                    "Description",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(holiday.description),
-                                  ActivityListScreen(id: id)
-                                ],
-                                )
-                              ),
+                                  scrollDirection: Axis.vertical,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Description",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(holiday.description),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 8, horizontal: 0),
+                                            child: Text(
+                                              "Activités",
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                              ),
+                                            ),
+                                          ),
+                                          IconButton(
+                                            onPressed: () {
+                                              model.goToCreateActivity();
+                                            },
+                                            icon: const Icon(Icons.add),
+                                          ),
+                                        ],
+                                      ),
+                                      ActivityListScreen(id: id)
+                                    ],
+                                  )),
                             ),
-                            const SizedBox(height: 64,)
+                            const SizedBox(
+                              height: 64,
+                            )
                           ],
                         ),
                       )

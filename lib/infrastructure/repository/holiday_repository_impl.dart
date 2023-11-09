@@ -45,4 +45,13 @@ class HolidayRepositoryImpl implements HolidayRepository {
         .map((holiday) => Holiday.fromJson(holiday))
         .toList();
   }
+  Future<void> addParticipant(String holidayId, String email) async {
+    await _apiService.post("/invitation", data: {"email": email, "holidayId": holidayId});
+  }
+  Future<void> exitHoliday(String id) async {
+    await _apiService.delete("/invitation/$id");
+  }
+  Future<void> publishHoliday(String id) async {
+    // TODO : implement this
+  }
 }

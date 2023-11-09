@@ -41,4 +41,19 @@ class HolidayDetailViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void goToCreateActivity() {
+    // todo implemente this
+  }
+  void addParticipant( String email) {
+    _holidayRepository.addParticipant(id, email);
+  }
+
+  void exitHoliday() {
+    _holidayRepository.exitHoliday(id);
+  }
+
+  void publishHoliday(String id) {
+    _holidayRepository.publishHoliday(id);
+  }
+
 }

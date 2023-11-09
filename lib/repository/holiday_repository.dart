@@ -12,4 +12,10 @@ abstract class HolidayRepository {
   Future<void> updateHoliday(String holidayId, Holiday holiday);
 
   Future<void> deleteHoliday(String id);
+
+  Future<void> addParticipant(String holidayId, String email);
+
+  Future<void> exitHoliday(String id) ;
+
+  Future<void> publishHoliday(String id) ;
 }
