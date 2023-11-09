@@ -21,8 +21,10 @@ class HolidayDetailViewModel extends ChangeNotifier {
     return _holidayRepository.getHoliday(id);
   }
 
-  void goToEditHoliday() {
-    _context.push('/holidays/edit/$id');
+  void goToEditHoliday()  async {
+     await _context.push('/holidays/edit/$id');
+     refreshData();
+
   }
 
   void removeHoliday() async {
@@ -33,4 +35,10 @@ class HolidayDetailViewModel extends ChangeNotifier {
   void goToHolidayMap() {
     _context.push('/holidays/map/$id');
   }
+
+  Future<void> refreshData() async {
+    holiday = _getHoliday(id);
+    notifyListeners();
+  }
+
 }

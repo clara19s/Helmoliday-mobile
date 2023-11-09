@@ -14,6 +14,8 @@ class EditActivityViewModel extends ChangeNotifier{
   late BuildContext _context;
   //todo: add activity view model
   late Future<Activity> activity;
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
 
   EditActivityViewModel(BuildContext context, this.id) {
     _context = context;
@@ -24,15 +26,20 @@ class EditActivityViewModel extends ChangeNotifier{
     var response = await _activityRepository.getActivities(id);
     return response;
   }
+  Future<Activity> getDetailActivity(String id) async {
+    var response = await _activityRepository.getDetailActivity(id);
+    return response;
+  }
 
   Future<void> editActivity(
   {
     required String name,
     required String description,
     required DateTimeRange dateTimeRange,
-    required String holidayId,
     required Address address,
   }) async {
+_isLoading = true;
+notifyListeners();
     _activityRepository.updateActivity(id, Activity(
       id : id,
       name: name,
@@ -41,6 +48,8 @@ class EditActivityViewModel extends ChangeNotifier{
       endDate: dateTimeRange.end,
       address: address,
     ));
+    _isLoading = false;
+    notifyListeners();
 
     _context.pop();
   }

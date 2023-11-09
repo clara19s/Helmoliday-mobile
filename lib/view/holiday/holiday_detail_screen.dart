@@ -18,7 +18,7 @@ class HolidayDetailScreen extends StatelessWidget {
       child: Consumer<HolidayDetailViewModel>(
         builder: (context, model, child) => Scaffold(
           appBar: AppBar(
-            title: const Text('Détails de la vacance'),
+            title: const Text('Détails'),
             actions: [
               IconButton(
                 onPressed: () {
