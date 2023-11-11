@@ -87,9 +87,8 @@ class ApiServiceImpl implements ApiService {
   }
 
   @override
-  Future<Response> put(String s, {required Map<String, dynamic> data}) {
-    var response = _dio.put(s, data: data);
-    print(response);
+  Future<Response> put(String s, {required Map<String, dynamic> data}) async {
+    var response = await _dio.put(s, data: data);
     return response;
   }
 

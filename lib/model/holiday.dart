@@ -43,4 +43,24 @@ class Holiday {
       'published': published,
     };
   }
+
+  Holiday copyWith({
+    String? id,
+    String? name,
+    String? description,
+    DateTime? startDate,
+    DateTime? endDate,
+    Address? address,
+    bool? published,
+  }) {
+    return Holiday(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      address: address ?? this.address,
+      published: published ?? this.published,
+    );
+  }
 }

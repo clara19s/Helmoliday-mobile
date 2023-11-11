@@ -7,11 +7,13 @@ import 'package:helmoliday/repository/auth_repository.dart';
 import 'package:helmoliday/repository/holiday_repository.dart';
 import 'package:helmoliday/service/location_service.dart';
 import 'package:helmoliday/service/navigation_service.dart';
+import 'package:helmoliday/service/toast_service.dart';
 import 'package:helmoliday/theme.dart';
 import 'package:provider/provider.dart';
 
 import 'infrastructure/repository/activity_repository_impl.dart';
 import 'infrastructure/repository/holiday_repository_impl.dart';
+import 'infrastructure/service/fluttertoast_service.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,11 +21,15 @@ void main() {
   final apiService = ApiServiceImpl();
   final authRepository = AuthRepositoryImpl(apiService);
   final holidayRepository = HolidayRepositoryImpl(apiService);
+  final toastService = FluttertoastService();
   final theme = HelmolidayTheme.light();
 
   runApp(
     MultiProvider(
       providers: [
+        Provider<IToastService>(
+          create: (_) => toastService,
+        ),
         Provider<AuthRepository>(
           create: (_) => authRepository,
         ),

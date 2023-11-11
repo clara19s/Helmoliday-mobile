@@ -34,7 +34,8 @@ class HolidayRepositoryImpl implements HolidayRepository {
 
   @override
   Future<void> updateHoliday(String holidayId, Holiday holiday) async {
-    var response = await _apiService.put("/holidays/$holidayId", data: holiday.toJson());
+    var response =
+        await _apiService.put("/holidays/$holidayId", data: holiday.toJson());
     print(response.data);
   }
 
@@ -45,13 +46,21 @@ class HolidayRepositoryImpl implements HolidayRepository {
         .map((holiday) => Holiday.fromJson(holiday))
         .toList();
   }
+
+  @override
   Future<void> addParticipant(String holidayId, String email) async {
-    await _apiService.post("/invitation", data: {"email": email, "holidayId": holidayId});
+    await _apiService
+        .post("/invitation", data: {"email": email, "holidayId": holidayId});
   }
+
+  @override
   Future<void> exitHoliday(String id) async {
     await _apiService.delete("/invitation/$id");
   }
-  Future<void> publishHoliday(String id) async {
-    // TODO : implement this
+
+  @override
+  Future<void> publishHoliday(Holiday holiday) async {
+    await _apiService.put("/holidays/${holiday.id}",
+        data: holiday.copyWith(published: true).toJson());
   }
 }

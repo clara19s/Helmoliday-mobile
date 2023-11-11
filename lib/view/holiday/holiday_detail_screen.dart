@@ -4,10 +4,11 @@ import 'package:helmoliday/view/activity/activity_list_screen.dart';
 import 'package:helmoliday/widget/holiday/holiday_banner.dart';
 import 'package:provider/provider.dart';
 
+import '../../model/holiday.dart';
 import '../../view_model/holiday/holiday_detail_view_model.dart';
 
 class HolidayDetailScreen extends StatelessWidget {
-   HolidayDetailScreen({super.key, required this.id});
+  HolidayDetailScreen({super.key, required this.id});
 
   final String id;
   final TextEditingController _controller = TextEditingController();
@@ -17,13 +18,13 @@ class HolidayDetailScreen extends StatelessWidget {
     return ChangeNotifierProvider<HolidayDetailViewModel>(
       create: (nContext) => HolidayDetailViewModel(nContext, id),
       child: Consumer<HolidayDetailViewModel>(
-        builder: (context, model, child) => Scaffold(
+        builder: (context, viewModel, child) => Scaffold(
           appBar: AppBar(
             title: const Text('Détails'),
             actions: [
               IconButton(
                 onPressed: () {
-                  model.goToEditHoliday();
+                  viewModel.goToEditHoliday();
                 },
                 icon: const Icon(Icons.edit),
               ),
@@ -38,7 +39,7 @@ class HolidayDetailScreen extends StatelessWidget {
                   Widget continueButton = TextButton(
                     child: const Text("Supprimer"),
                     onPressed: () {
-                      model.removeHoliday();
+                      viewModel.removeHoliday();
                       Navigator.of(context).pop();
                     },
                   );
@@ -62,123 +63,141 @@ class HolidayDetailScreen extends StatelessWidget {
                 },
                 icon: const Icon(Icons.delete),
               ),
-              PopupMenuButton(
-                  itemBuilder: (context) => [
-                        const PopupMenuItem(
-                          value: "publier",
-                          child: Text("Publier"),
-                        ),
-                        const PopupMenuItem(
-                          value: "exporter",
-                          child: Text("Exporter"),
-                        ),
-                        const PopupMenuItem(
-                          value: "ajouterParticipant",
-                          child: Text("Ajouter des participants"),
-                        ),
-                        const PopupMenuItem(
-                          value: "quitter",
-                          child: Text("Quitter la période de vacance"),
-                        ),
-                      ],
-                  onSelected: (value) {
-                    if (value == "publier") {
-                      Widget cancelButton = TextButton(
-                        child: const Text("Annuler"),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      );
-                      Widget continueButton = TextButton(
-                        child: const Text("Confirmer"),
-                        onPressed: () {
-                          model.publishHoliday(model.id);
-                          Navigator.of(context).pop();
-                        },
-                      );
-                      AlertDialog alert = AlertDialog(
-                        title: const Text("Publier la periode de vacance"),
-                        content:  const Text("etes vous sur de vouloir publier la periode de vacance ?"),
-                        actions: [
-                          cancelButton,
-                          continueButton,
-                        ],
-                      );
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return alert;
-                        },
-                      );
-                    } else if (value == "exporter") {
-                      // TODO : export a impléméneter
-                    } else if (value == "ajouterParticipant") {
-
-                      Widget cancelButton = TextButton(
-                        child: const Text("Annuler"),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      );
-                      Widget continueButton = TextButton(
-                        child: const Text("Confirmer"),
-                        onPressed: () {
-                          model.addParticipant(_controller.text);
-                          Navigator.of(context).pop();
-                        },
-                      );
-                      AlertDialog alert = AlertDialog(
-                        title: const Text("Ajouter un participant"),
-                        content:  TextField(
-                          controller: _controller,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Email',
-
+              FutureBuilder<Holiday>(
+                future: viewModel.holiday,
+                // Future de l'état de la période de vacances
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return PopupMenuButton<String>(
+                      onSelected: (value) {
+                        if (value == "publier") {
+                          Widget cancelButton = TextButton(
+                            child: const Text("Annuler"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          );
+                          Widget continueButton = TextButton(
+                            child: const Text("Confirmer"),
+                            onPressed: () {
+                              viewModel.publishHoliday();
+                              Navigator.of(context).pop();
+                            },
+                          );
+                          AlertDialog alert = AlertDialog(
+                            title: const Text("Publier la période de vacance"),
+                            content: const Text(
+                                "Êtes-vous sur de vouloir publier la période de vacance ?"),
+                            actions: [
+                              cancelButton,
+                              continueButton,
+                            ],
+                          );
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return alert;
+                            },
+                          );
+                        } else if (value == "exporter") {
+                          // TODO : export a implémenter
+                        } else if (value == "ajouterParticipant") {
+                          Widget cancelButton = TextButton(
+                            child: const Text("Annuler"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          );
+                          Widget continueButton = TextButton(
+                            child: const Text("Confirmer"),
+                            onPressed: () {
+                              viewModel.addParticipant(_controller.text);
+                              Navigator.of(context).pop();
+                            },
+                          );
+                          AlertDialog alert = AlertDialog(
+                            title: const Text("Ajouter un participant"),
+                            content: TextField(
+                              controller: _controller,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Email',
+                              ),
+                            ),
+                            actions: [
+                              cancelButton,
+                              continueButton,
+                            ],
+                          );
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return alert;
+                            },
+                          );
+                        } else if (value == "quitter") {
+                          Widget cancelButton = TextButton(
+                            child: const Text("Annuler"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          );
+                          Widget continueButton = TextButton(
+                            child: const Text("Quitter"),
+                            onPressed: () {
+                              viewModel.exitHoliday();
+                              Navigator.of(context).pop();
+                            },
+                          );
+                          AlertDialog alert = AlertDialog(
+                            title: const Text(
+                                "Êtes-vous sûr de vouloir quitter ?"),
+                            content: const Text(
+                                "Attention, une fois que vous aurez quitté la période de vacance, vous ne pourrez plus y accéder."),
+                            actions: [
+                              cancelButton,
+                              continueButton,
+                            ],
+                          );
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return alert;
+                            },
+                          );
+                        }
+                      },
+                      itemBuilder: (BuildContext context) {
+                        return <PopupMenuEntry<String>>[
+                          if (!snapshot.data!.published)
+                            const PopupMenuItem<String>(
+                              value: "publier",
+                              child: Text("Publier"),
+                            ),
+                          const PopupMenuItem<String>(
+                            value: "exporter",
+                            child: Text("Exporter"),
                           ),
+                          const PopupMenuItem<String>(
+                            value: "ajouterParticipant",
+                            child: Text("Ajouter des participants"),
                           ),
-                        actions: [
-                          cancelButton,
-                          continueButton,
-                        ],
-                      );
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return alert;
-                        },
-                      );
-                    } else if (value == "quitter") {
-
-                      Widget cancelButton = TextButton(
-                        child: const Text("Annuler"),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      );
-                      Widget continueButton = TextButton(
-                        child: const Text("Confirmer"),
-                        onPressed: () {
-                          model.exitHoliday();
-                          Navigator.of(context).pop();
-                        },
-                      );
-                      AlertDialog alert = AlertDialog(
-                        title: const Text("Quitter la periode de vacance"),
-                        content:  const Text("etes vous sur de vouloir quitter la periode de vacance ?"),
-                        actions: [
-                          cancelButton,
-                          continueButton,
-                        ],
-                      );
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return alert;
-                        },
-                      );
-                    }
-                  }),
+                          const PopupMenuItem<String>(
+                            value: "quitter",
+                            child: Text("Quitter la période de vacances"),
+                          ),
+                        ];
+                      },
+                    );
+                  } else {
+                    // Affichez un widget alternatif (comme un spinner de chargement) si les données ne sont pas encore disponibles
+                    return const Placeholder(
+                      fallbackHeight: 1,
+                      fallbackWidth: 1,
+                    );
+                  }
+                },
+              )
             ],
           ),
           floatingActionButton: FloatingActionButton(
@@ -193,7 +212,7 @@ class HolidayDetailScreen extends StatelessWidget {
             child: const Icon(Icons.chat),
           ),
           body: FutureBuilder(
-              future: model.holiday,
+              future: viewModel.holiday,
               builder: (context, snapshot) {
                 var holiday = snapshot.data;
                 return snapshot.hasData
@@ -211,7 +230,6 @@ class HolidayDetailScreen extends StatelessWidget {
                                 end: holiday.endDate,
                               ),
                             ),
-                            // J'aimerai que le bouton puisse déborder de la moitié de sa taille sur le widget du dessus
                             Ink(
                               decoration: const ShapeDecoration(
                                 color: HelmolidayTheme.primaryColor,
@@ -221,7 +239,7 @@ class HolidayDetailScreen extends StatelessWidget {
                                 icon: const Icon(Icons.map),
                                 color: Colors.white,
                                 onPressed: () {
-                                  model.goToHolidayMap();
+                                  viewModel.goToHolidayMap();
                                 },
                               ),
                             ),
@@ -259,7 +277,7 @@ class HolidayDetailScreen extends StatelessWidget {
                                           ),
                                           IconButton(
                                             onPressed: () {
-                                              model.goToCreateActivity();
+                                              viewModel.goToCreateActivity();
                                             },
                                             icon: const Icon(Icons.add),
                                           ),

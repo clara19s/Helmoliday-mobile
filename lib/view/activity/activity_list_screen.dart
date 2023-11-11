@@ -29,7 +29,7 @@ class _ActivityListScreen extends State<ActivityListScreen> {
                 var activities = snapshot.data;
                 if (activities == null || activities.isEmpty) {
                   return const Center(
-                    child: Text('No activities'),
+                    child: Text('Aucune activité'),
                   );
                 }
 

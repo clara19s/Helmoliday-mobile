@@ -17,5 +17,5 @@ abstract class HolidayRepository {
 
   Future<void> exitHoliday(String id) ;
 
-  Future<void> publishHoliday(String id) ;
+  Future<void> publishHoliday(Holiday holiday) ;
 }
