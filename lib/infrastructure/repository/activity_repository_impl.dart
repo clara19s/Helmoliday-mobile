@@ -8,9 +8,8 @@ class ActivityRepositoryImp implements ActivityRepository{
 
   ActivityRepositoryImp(this._apiService);
   @override
-  Future<void> createActivity(Activity activity) {
-    // TODO: implement createActivity
-    throw UnimplementedError();
+  Future<void> createActivity(Activity activity) async {
+     await _apiService.post("/activities", data: activity.toJson());
   }
 
   @override

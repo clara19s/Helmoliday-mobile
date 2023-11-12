@@ -46,6 +46,8 @@ class HolidayDetailViewModel extends ChangeNotifier {
 
   void goToCreateActivity() {
     // todo implemente this
+    _context.push('/activities/add/$id');
+    refreshData();
   }
 
   void addParticipant(String email) {
