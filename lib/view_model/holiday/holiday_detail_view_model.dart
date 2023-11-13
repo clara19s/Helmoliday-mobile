@@ -44,9 +44,8 @@ class HolidayDetailViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void goToCreateActivity() {
-    // todo implemente this
-    _context.push('/activities/add/$id');
+  void goToCreateActivity() async {
+    await _context.push('/activities/add/$id');
     refreshData();
   }
 

@@ -4,7 +4,7 @@ abstract class ActivityRepository{
 
   Future<List<Activity>> getActivities(String id);
 
-  Future<void> createActivity(Activity activity);
+  Future<void> createActivity(String holidayId, Activity activity);
 
   Future<void> updateActivity(String activityId, Activity activity);
 

@@ -8,8 +8,9 @@ class ActivityRepositoryImp implements ActivityRepository{
 
   ActivityRepositoryImp(this._apiService);
   @override
-  Future<void> createActivity(Activity activity) async {
-     await _apiService.post("/activities", data: activity.toJson());
+  Future<void> createActivity(String holidayId, Activity activity) async {
+     var response = await _apiService.post("/activities/holiday/$holidayId", data: activity.toJson());
+     print(response);
   }
 
   @override

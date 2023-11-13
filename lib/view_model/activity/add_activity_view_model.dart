@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +6,7 @@ import '../../model/activity.dart';
 import '../../model/address.dart';
 import '../../repository/activity_repository.dart';
 
-class AddactivityViewModel extends ChangeNotifier{
+class AddActivityViewModel extends ChangeNotifier{
   late final ActivityRepository _activityRepository;
 
   final String id;
@@ -16,12 +15,12 @@ class AddactivityViewModel extends ChangeNotifier{
   bool get isLoading => _isLoading;
   late BuildContext _context;
 
-  AddactivityViewModel(BuildContext context, this.id) {
+  AddActivityViewModel(BuildContext context, this.id) {
     _context = context;
     _activityRepository = context.read<ActivityRepository>();
   }
 
-  Future<void> AddActivity(
+  Future<void> addActivity(
   {
     required String name,
     required String description,
@@ -30,7 +29,7 @@ class AddactivityViewModel extends ChangeNotifier{
     _isLoading = true;
     notifyListeners();
 
-    _activityRepository.createActivity(Activity(
+    _activityRepository.createActivity(id, Activity(
       id : id,
       name: name,
       description: description,

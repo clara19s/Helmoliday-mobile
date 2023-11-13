@@ -17,8 +17,8 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider
-      (create: (context) => AddactivityViewModel(context, widget.id),
-      child: Consumer<AddactivityViewModel>(
+      (create: (context) => AddActivityViewModel(context, widget.id),
+      child: Consumer<AddActivityViewModel>(
         builder: (context, model, child) =>
             Scaffold(
               appBar: AppBar(
@@ -30,7 +30,7 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
                   child: model.isLoading
                       ? const Center(child: CircularProgressIndicator())
                       : ActivityForm(onSave: (result) async {
-                    model.AddActivity(
+                    model.addActivity(
                         name: result['name'],
                         description: result['description'],
                         dateTimeRange: result['dateTimeRange'],
