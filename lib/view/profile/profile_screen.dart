@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:helmoliday/widget/common/avatar_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../view_model/profile/profile_view_model.dart';
@@ -57,10 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ? const Center(child: CircularProgressIndicator())
                     : Column(
                         children: [
-                          const Image(
-                            image: AssetImage("assets/images/account.png"),
-                            width: 250,
-                          ),
+                          const AvatarPicker(),
                           const SizedBox(height: 16),
                           TextField(
                             controller: _emailController,

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:helmoliday/infrastructure/repository/auth_repository_impl.dart';
 import 'package:helmoliday/infrastructure/service/api_service_impl.dart';
@@ -5,6 +7,7 @@ import 'package:helmoliday/infrastructure/service/location_service_impl.dart';
 import 'package:helmoliday/repository/activity_repository.dart';
 import 'package:helmoliday/repository/auth_repository.dart';
 import 'package:helmoliday/repository/holiday_repository.dart';
+import 'package:helmoliday/service/api_service.dart';
 import 'package:helmoliday/service/location_service.dart';
 import 'package:helmoliday/service/navigation_service.dart';
 import 'package:helmoliday/service/toast_service.dart';
@@ -24,9 +27,14 @@ void main() {
   final toastService = FluttertoastService();
   final theme = HelmolidayTheme.light();
 
+  HttpOverrides.global = MyHttpOverrides();
+
   runApp(
     MultiProvider(
       providers: [
+        Provider<ApiService>(
+          create: (_) => apiService,
+        ),
         Provider<IToastService>(
           create: (_) => toastService,
         ),
@@ -51,4 +59,14 @@ void main() {
       ),
     ),
   );
+}
+
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
 }

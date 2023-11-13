@@ -39,6 +39,10 @@ class HolidayDetailViewModel extends ChangeNotifier {
     _context.push('/holidays/map/$id');
   }
 
+  void goToHolidayChat() {
+    _context.push('/holidays/chat/$id');
+  }
+
   Future<void> refreshData() async {
     holiday = _getHoliday(id);
     notifyListeners();

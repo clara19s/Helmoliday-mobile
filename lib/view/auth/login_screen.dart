@@ -127,33 +127,33 @@ class _LoginScreenBody extends StatelessWidget {
                     builder: (context, model, child) {
                       return model.isLoading
                           ? const Center(
-                              child: CircularProgressIndicator(),
-                            )
+                        child: CircularProgressIndicator(),
+                      )
                           : MaterialButton(
-                              onPressed: () async {
-                                model.logIn(
-                                  email: _emailController.text,
-                                  password: _passwordController.text,
-                                );
-                              },
-                              color: const Color(0xff1070b7),
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              padding: const EdgeInsets.all(16),
-                              textColor: const Color(0xffffffff),
-                              height: 40,
-                              minWidth: MediaQuery.of(context).size.width,
-                              child: const Text(
-                                "Se connecter",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  fontStyle: FontStyle.normal,
-                                ),
-                              ),
-                            );
+                        onPressed: () async {
+                          model.logIn(
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                          );
+                        },
+                        color: const Color(0xff1070b7),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        padding: const EdgeInsets.all(16),
+                        textColor: const Color(0xffffffff),
+                        height: 40,
+                        minWidth: MediaQuery.of(context).size.width,
+                        child: const Text(
+                          "Se connecter",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            fontStyle: FontStyle.normal,
+                          ),
+                        ),
+                      );
                     },
                   ),
                 ),
