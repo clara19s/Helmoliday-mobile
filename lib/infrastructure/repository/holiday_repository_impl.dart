@@ -1,5 +1,6 @@
 import 'package:helmoliday/model/holiday.dart';
 
+import '../../model/weather.dart';
 import '../../repository/holiday_repository.dart';
 import '../../service/api_service.dart';
 
@@ -62,5 +63,11 @@ class HolidayRepositoryImpl implements HolidayRepository {
   Future<void> publishHoliday(Holiday holiday) async {
     await _apiService.put("/holidays/${holiday.id}",
         data: holiday.copyWith(published: true).toJson());
+  }
+
+  @override
+  Future<Weather> getWeather(String id) async {
+    var response = await _apiService.get("/holidays/$id/weather");
+    return Weather.fromJson(response.data);
   }
 }

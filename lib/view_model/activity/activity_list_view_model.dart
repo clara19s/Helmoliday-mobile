@@ -16,7 +16,7 @@ class ActivityListViewModel extends ChangeNotifier{
     _activityRepository = _context.read<ActivityRepository>();
     activities = _getActivity(id);
   }
-  // todo return a list of activity view model
+  // TODO : return a list of activity view model
   Future<List<Activity>> _getActivity(String id) async {
     return _activityRepository.getActivities(id);
   }

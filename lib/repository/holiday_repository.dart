@@ -1,3 +1,5 @@
+import 'package:helmoliday/model/weather.dart';
+
 import '../model/holiday.dart';
 
 abstract class HolidayRepository {
@@ -18,4 +20,6 @@ abstract class HolidayRepository {
   Future<void> exitHoliday(String id) ;
 
   Future<void> publishHoliday(Holiday holiday) ;
+
+  Future<Weather> getWeather(String id) ;
 }

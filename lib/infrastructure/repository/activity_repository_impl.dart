@@ -10,6 +10,7 @@ class ActivityRepositoryImp implements ActivityRepository{
   @override
   Future<void> createActivity(String holidayId, Activity activity) async {
      var response = await _apiService.post("/activities/holiday/$holidayId", data: activity.toJson());
+
      print(response);
   }
 

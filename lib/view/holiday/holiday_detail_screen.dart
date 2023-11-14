@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:helmoliday/theme.dart';
 import 'package:helmoliday/view/activity/activity_list_screen.dart';
+import 'package:helmoliday/view/weather_screen.dart';
 import 'package:helmoliday/widget/holiday/holiday_banner.dart';
 import 'package:provider/provider.dart';
 
@@ -252,12 +253,19 @@ class HolidayDetailScreen extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const Text(
-                                        "Description",
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w600,
-                                        ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text(
+                                            "Description",
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          WeatherScreen(id: id),
+                                        ],
                                       ),
                                       const SizedBox(height: 4),
                                       Text(holiday.description),
