@@ -1,14 +1,18 @@
+import 'package:helmoliday/model/activity.dart';
 import 'package:helmoliday/model/holiday.dart';
 
 import '../../model/user.dart';
 import '../../model/weather.dart';
 import '../../repository/holiday_repository.dart';
 import '../../service/api_service.dart';
+import '../../service/export_service.dart';
 
 class HolidayRepositoryImpl implements HolidayRepository {
   final ApiService _apiService;
+  final ExportService _exportService;
 
-  HolidayRepositoryImpl(this._apiService);
+
+  HolidayRepositoryImpl(this._apiService, this._exportService);
 
   @override
   Future<void> createHoliday(Holiday holiday) async {
@@ -72,6 +76,11 @@ class HolidayRepositoryImpl implements HolidayRepository {
   Future<Weather> getWeather(String id) async {
     var response = await _apiService.get("/holidays/$id/weather");
     return Weather.fromJson(response.data);
+  }
+
+  @override
+  Future<void> exportHoliday(List<Activity> activities) async {
+    // _exportService.export(activities);
   }
 
 

@@ -4,23 +4,33 @@ import 'package:helmoliday/repository/holiday_repository.dart';
 import 'package:helmoliday/service/toast_service.dart';
 import 'package:provider/provider.dart';
 
+import '../../model/activity.dart';
 import '../../model/guest.dart';
 import '../../model/holiday.dart';
+import '../../repository/activity_repository.dart';
 
 class HolidayDetailViewModel extends ChangeNotifier {
   late final HolidayRepository _holidayRepository;
+  late final ActivityRepository _activityRepository;
   final IToastService _toastService;
   final BuildContext _context;
   final String id;
 
   late Future<Holiday> holiday;
 
+  late Future<List<Activity>> activies;
+
   HolidayDetailViewModel(this._context, this.id)
       : _holidayRepository =
             Provider.of<HolidayRepository>(_context, listen: false),
+        _activityRepository = Provider.of<ActivityRepository>(_context,
+            listen: false),
         _toastService = Provider.of<IToastService>(_context, listen: false) {
     holiday = _getHoliday(id);
+    activies = _getActivities(id);
   }
+
+
 
   Future<Holiday> _getHoliday(String id) async {
     return _holidayRepository.getHoliday(id);
@@ -66,5 +76,14 @@ class HolidayDetailViewModel extends ChangeNotifier {
     _toastService.showMessage(ToastMessage(
         type: ToastType.success, text: 'Période de vacances publiée'));
     refreshData();
+  }
+
+  void export () async {
+    var activities = await activies;
+    _holidayRepository.exportHoliday(activities);
+  }
+
+  Future<List<Activity>> _getActivities(String id) {
+    return _activityRepository.getActivities(id);
   }
 }

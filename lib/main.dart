@@ -13,14 +13,16 @@ import 'package:provider/provider.dart';
 
 import 'infrastructure/repository/activity_repository_impl.dart';
 import 'infrastructure/repository/holiday_repository_impl.dart';
+import 'infrastructure/service/export_service_impl.dart';
 import 'infrastructure/service/fluttertoast_service.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   final NavigationService navigationService = NavigationService();
   final apiService = ApiServiceImpl();
+  final exportService = ExportServiceImpl();
   final authRepository = AuthRepositoryImpl(apiService);
-  final holidayRepository = HolidayRepositoryImpl(apiService);
+  final holidayRepository = HolidayRepositoryImpl(apiService , exportService);
   final toastService = FluttertoastService();
   final theme = HelmolidayTheme.light();
 

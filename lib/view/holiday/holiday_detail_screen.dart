@@ -102,7 +102,35 @@ class HolidayDetailScreen extends StatelessWidget {
                             },
                           );
                         } else if (value == "exporter") {
-                          // TODO : export a implémenter
+                          Widget cancelButton = TextButton(
+                            child: const Text("Annuler"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          );
+                          Widget continueButton = TextButton(
+                            child: const Text("Accepter"),
+                            onPressed: () {
+                              viewModel.export();
+                              Navigator.of(context).pop();
+                            },
+                          );
+                          AlertDialog alert = AlertDialog(
+                            title: const Text(
+                                "Export"),
+                            content: const Text(
+                                "Êtes-vous sûr de vouloir exporter la liste des activités ?"),
+                            actions: [
+                              cancelButton,
+                              continueButton,
+                            ],
+                          );
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return alert;
+                            },
+                          );
                         } else if (value == "ajouterParticipant") {
                           // TODO : ajouter vérification si l'utilisateur existe
                           Widget cancelButton = TextButton(
