@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:helmoliday/view_model/holiday/holiday_detail_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/activity.dart';
 import '../../view_model/activity/activity_list_view_model.dart';
 
 class ActivityListScreen extends StatefulWidget {
-  const ActivityListScreen({super.key, required this.id, required this.activities});
+  const ActivityListScreen({super.key, required this.id, required this.activities, required this.onUpdated});
 
   final String id;
   final Future<List<Activity>> activities;
+  final  Future<void> onUpdated;
 
   @override
   State<ActivityListScreen> createState() => _ActivityListScreen();
@@ -17,9 +19,7 @@ class ActivityListScreen extends StatefulWidget {
 class _ActivityListScreen extends State<ActivityListScreen> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (BuildContext nContext) => ActivityListViewModel(nContext, widget.id),
-      child: Consumer<ActivityListViewModel>(
+    return Consumer<HolidayDetailViewModel>(
         builder: (context, viewModel, child) => FutureBuilder(
           future: widget.activities,
           builder: (context, AsyncSnapshot<List<Activity>> snapshot) {
@@ -91,8 +91,6 @@ class _ActivityListScreen extends State<ActivityListScreen> {
               );
             }
           },
-        ),
-      ),
-    );
+    ));
   }
 }

@@ -40,7 +40,7 @@ class EditActivityViewModel extends ChangeNotifier{
   }) async {
 _isLoading = true;
 notifyListeners();
-    _activityRepository.updateActivity(id, Activity(
+   await _activityRepository.updateActivity(id, Activity(
       id : id,
       name: name,
       description: description,

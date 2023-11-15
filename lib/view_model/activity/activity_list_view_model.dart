@@ -6,34 +6,10 @@ import '../../model/activity.dart';
 import '../../repository/activity_repository.dart';
 
 class ActivityListViewModel extends ChangeNotifier{
-  late final ActivityRepository _activityRepository;
-  final BuildContext _context;
-  final String id;
 
-  late Future<List<Activity>> activities;
-
-  ActivityListViewModel(this._context, this.id) {
-    _activityRepository = _context.read<ActivityRepository>();
-    activities = _getActivity(id);
-  }
   // TODO : return a list of activity view model
-  Future<List<Activity>> _getActivity(String id) async {
-    return _activityRepository.getActivities(id);
-  }
-
-  void goToEditActivity(String id) async {
-    await _context.push('/activities/edit/$id');
-    refreshData();
-  }
 
 
-  void deleteActivity(String id) async {
-    await _activityRepository.deleteActivity(id);
-    activities = _getActivity(this.id);
-    notifyListeners();
-  }
-  Future<void> refreshData() async {
-    activities =  _getActivity(id);
-    notifyListeners();
-  }
+
+
 }

@@ -49,12 +49,11 @@ class HolidayDetailViewModel extends ChangeNotifier {
 
   Future<void> refreshData() async {
     holiday = _getHoliday(id);
-    notifyListeners();
   }
 
   void goToCreateActivity() async {
     await _context.push('/activities/add/$id');
-    refreshData();
+    refreshActivities();
   }
 
   void addParticipant(String email) {
@@ -76,6 +75,28 @@ class HolidayDetailViewModel extends ChangeNotifier {
   }
 
   Future<List<Activity>> _getActivities(String id) {
+    return _activityRepository.getActivities(id);
+  }
+
+  Future <void> refreshActivities() async {
+    activities = _getActivities(id);
+    notifyListeners();
+
+  }
+  void goToEditActivity(String id) async {
+    await _context.push('/activities/edit/$id');
+    refreshActivities();
+
+  }
+
+
+  void deleteActivity(String id) async {
+    await _activityRepository.deleteActivity(id);
+    activities = _getActivity(this.id);
+    refreshActivities();
+
+  }
+  Future<List<Activity>> _getActivity(String id) async {
     return _activityRepository.getActivities(id);
   }
 }

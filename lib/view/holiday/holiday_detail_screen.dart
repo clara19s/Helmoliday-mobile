@@ -296,7 +296,7 @@ class HolidayDetailScreen extends StatelessWidget {
                                           ),
                                         ],
                                       ),
-                                     ActivityListScreen(id: id, activities: viewModel.activities),
+                                     ActivityListScreen(id: id, activities: viewModel.activities, onUpdated: viewModel.refreshData()),
                                     ],
                                   )),
                             ),
