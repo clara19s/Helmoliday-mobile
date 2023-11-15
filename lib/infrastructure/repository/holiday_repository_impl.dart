@@ -1,5 +1,6 @@
 import 'package:helmoliday/model/holiday.dart';
 
+import '../../model/user.dart';
 import '../../model/weather.dart';
 import '../../repository/holiday_repository.dart';
 import '../../service/api_service.dart';
@@ -50,13 +51,15 @@ class HolidayRepositoryImpl implements HolidayRepository {
 
   @override
   Future<void> addParticipant(String holidayId, String email) async {
+
     await _apiService
-        .post("/invitation", data: {"email": email, "holidayId": holidayId});
+        .post("/invitations", data: {"email": email, "holidayId": holidayId});
   }
 
   @override
   Future<void> exitHoliday(String id) async {
-    await _apiService.delete("/invitation/$id");
+    await _apiService.delete("/invitations/$id");
+
   }
 
   @override
@@ -70,4 +73,6 @@ class HolidayRepositoryImpl implements HolidayRepository {
     var response = await _apiService.get("/holidays/$id/weather");
     return Weather.fromJson(response.data);
   }
+
+
 }

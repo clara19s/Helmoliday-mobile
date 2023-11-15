@@ -22,4 +22,5 @@ abstract class HolidayRepository {
   Future<void> publishHoliday(Holiday holiday) ;
 
   Future<Weather> getWeather(String id) ;
+
 }

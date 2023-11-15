@@ -4,6 +4,7 @@ import 'package:helmoliday/repository/holiday_repository.dart';
 import 'package:helmoliday/service/toast_service.dart';
 import 'package:provider/provider.dart';
 
+import '../../model/guest.dart';
 import '../../model/holiday.dart';
 
 class HolidayDetailViewModel extends ChangeNotifier {
@@ -55,6 +56,7 @@ class HolidayDetailViewModel extends ChangeNotifier {
 
   void exitHoliday() {
     _holidayRepository.exitHoliday(id);
+    _context.pop();
   }
 
   void publishHoliday() async {

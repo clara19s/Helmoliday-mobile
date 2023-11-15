@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:helmoliday/theme.dart';
 import 'package:helmoliday/view/activity/activity_list_screen.dart';
+import 'package:helmoliday/view/holiday/guest_holiday_screen.dart';
 import 'package:helmoliday/view/weather_screen.dart';
 import 'package:helmoliday/widget/holiday/holiday_banner.dart';
 import 'package:provider/provider.dart';
@@ -103,6 +104,7 @@ class HolidayDetailScreen extends StatelessWidget {
                         } else if (value == "exporter") {
                           // TODO : export a implémenter
                         } else if (value == "ajouterParticipant") {
+                          // TODO : ajouter vérification si l'utilisateur existe
                           Widget cancelButton = TextButton(
                             child: const Text("Annuler"),
                             onPressed: () {
@@ -269,6 +271,8 @@ class HolidayDetailScreen extends StatelessWidget {
                                       ),
                                       const SizedBox(height: 4),
                                       Text(holiday.description),
+                                      const SizedBox(height: 16),
+                                      GuestHolidayScreen( guests: holiday.guests!),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
@@ -279,7 +283,8 @@ class HolidayDetailScreen extends StatelessWidget {
                                             child: Text(
                                               "Activités",
                                               style: TextStyle(
-                                                fontSize: 20,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w600,
                                               ),
                                             ),
                                           ),

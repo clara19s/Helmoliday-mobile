@@ -12,7 +12,6 @@ class WeatherScreen extends StatefulWidget {
   @override
   State<WeatherScreen> createState() => _MeteoScreen();
 }
-
 class _MeteoScreen extends State<WeatherScreen> {
   @override
   Widget build(BuildContext context) {
@@ -30,12 +29,21 @@ class _MeteoScreen extends State<WeatherScreen> {
                         child: Text('Aucune météo'),
                       );
                     }
-                    return Row(
-                      children: [
-                        Image.network(weather.icon, width: 50, height: 50),
-                        Text(weather.temperature.toString() + "°C"),
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 5, 10, 5),
+                        child: Row(
+                          children: [
+                            Image.network(weather.icon, width: 50, height: 50),
+                            Text("${weather.temperature}°C"),
 
-                      ],
+                          ],
+                        ),
+                      ),
                     );
                   }
                   return const Center(
