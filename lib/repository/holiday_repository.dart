@@ -1,3 +1,4 @@
+import 'package:helmoliday/model/activity.dart';
 import 'package:helmoliday/model/weather.dart';
 
 import '../model/holiday.dart';

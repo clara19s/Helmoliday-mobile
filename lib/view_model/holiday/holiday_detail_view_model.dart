@@ -1,25 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:helmoliday/repository/activity_repository.dart';
 import 'package:helmoliday/repository/holiday_repository.dart';
 import 'package:helmoliday/service/toast_service.dart';
+import 'package:helmoliday/view_model/activity/activity_view_model.dart';
 import 'package:provider/provider.dart';
 
+import '../../model/activity.dart';
 import '../../model/guest.dart';
 import '../../model/holiday.dart';
 
 class HolidayDetailViewModel extends ChangeNotifier {
   late final HolidayRepository _holidayRepository;
+  late final ActivityRepository _activityRepository;
   final IToastService _toastService;
   final BuildContext _context;
   final String id;
 
   late Future<Holiday> holiday;
+  late Future<List<Activity>> activities;
 
   HolidayDetailViewModel(this._context, this.id)
       : _holidayRepository =
             Provider.of<HolidayRepository>(_context, listen: false),
+        _activityRepository = Provider.of<ActivityRepository>(_context, listen: false),
         _toastService = Provider.of<IToastService>(_context, listen: false) {
     holiday = _getHoliday(id);
+    activities = _getActivities(id);
   }
 
   Future<Holiday> _getHoliday(String id) async {
@@ -66,5 +73,9 @@ class HolidayDetailViewModel extends ChangeNotifier {
     _toastService.showMessage(ToastMessage(
         type: ToastType.success, text: 'Période de vacances publiée'));
     refreshData();
+  }
+
+  Future<List<Activity>> _getActivities(String id) {
+    return _activityRepository.getActivities(id);
   }
 }

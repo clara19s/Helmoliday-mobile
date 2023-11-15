@@ -1,3 +1,4 @@
+import 'package:helmoliday/model/activity.dart';
 import 'package:helmoliday/model/holiday.dart';
 
 import '../../model/user.dart';
@@ -73,6 +74,8 @@ class HolidayRepositoryImpl implements HolidayRepository {
     var response = await _apiService.get("/holidays/$id/weather");
     return Weather.fromJson(response.data);
   }
+
+
 
 
 }
