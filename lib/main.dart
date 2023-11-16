@@ -9,6 +9,7 @@ import 'package:helmoliday/service/location_service.dart';
 import 'package:helmoliday/service/navigation_service.dart';
 import 'package:helmoliday/service/toast_service.dart';
 import 'package:helmoliday/theme.dart';
+import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
 import 'infrastructure/repository/activity_repository_impl.dart';
@@ -41,6 +42,9 @@ void main() {
         ),
         Provider<ActivityRepository>(
           create: (_) => ActivityRepositoryImp(apiService),
+        ),
+        Provider<Logger>(
+          create: (_) => Logger('HELMoliday'),
         ),
       ],
       child: MaterialApp.router(
