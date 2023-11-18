@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:helmoliday/view_model/holiday/holiday_detail_view_model.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/activity.dart';
@@ -65,8 +66,20 @@ class _ActivityListScreen extends State<ActivityListScreen> {
                     },
                     child: ListTile(
                       title: Text(activity.name),
-                      subtitle: Text(activity.description),
-                      trailing: PopupMenuButton(
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(activity.description),
+                          Text(
+                            "du ${formatDate(activity.startDate)} au ${formatDate(activity.endDate)}",
+                          ),
+                        ],
+                      ),
+
+
+
+                      trailing:
+                      PopupMenuButton(
                         itemBuilder: (context) => [
                           const PopupMenuItem(
                             value: 'edit',
@@ -94,3 +107,8 @@ class _ActivityListScreen extends State<ActivityListScreen> {
     ));
   }
 }
+
+String formatDate(DateTime date) {
+  return DateFormat('dd-MM-yy').format(date);
+}
+
