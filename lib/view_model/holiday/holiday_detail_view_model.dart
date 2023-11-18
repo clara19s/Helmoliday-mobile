@@ -16,6 +16,7 @@ class HolidayDetailViewModel extends ChangeNotifier {
   final IToastService _toastService;
   final BuildContext _context;
   final String id;
+  bool _triCroissant = true;
 
   late Future<Holiday> holiday;
   late Future<List<Activity>> activities;
@@ -51,10 +52,7 @@ class HolidayDetailViewModel extends ChangeNotifier {
     holiday = _getHoliday(id);
   }
 
-  void goToCreateActivity() async {
-    await _context.push('/activities/add/$id');
-    refreshActivities();
-  }
+
 
   void addParticipant(String email) {
     _holidayRepository.addParticipant(id, email);
@@ -88,6 +86,10 @@ class HolidayDetailViewModel extends ChangeNotifier {
     refreshActivities();
 
   }
+  void goToCreateActivity() async {
+    await _context.push('/activities/add/$id');
+    refreshActivities();
+  }
 
 
   void deleteActivity(String id) async {
@@ -99,4 +101,15 @@ class HolidayDetailViewModel extends ChangeNotifier {
   Future<List<Activity>> _getActivity(String id) async {
     return _activityRepository.getActivities(id);
   }
+
+  void trierListe() {
+    if (_triCroissant) {
+      activities.then((value) => value.sort((a, b) => a.startDate.compareTo(b.startDate)));
+    } else {
+      activities.then((value) => value.sort((a, b) => b.startDate.compareTo(a.startDate)));
+    }
+    _triCroissant = !_triCroissant;
+    notifyListeners();
+  }
+  bool get triCroissant => _triCroissant;
 }

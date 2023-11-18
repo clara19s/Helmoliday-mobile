@@ -14,12 +14,15 @@ class HolidayDetailScreen extends StatelessWidget {
 
   final String id;
   final TextEditingController _controller = TextEditingController();
+  bool triCroissant = true;
+
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<HolidayDetailViewModel>(
       create: (nContext) => HolidayDetailViewModel(nContext, id),
       child: Consumer<HolidayDetailViewModel>(
+
         builder: (context, viewModel, child) => Scaffold(
           appBar: AppBar(
             title: const Text('Détails'),
@@ -273,13 +276,11 @@ class HolidayDetailScreen extends StatelessWidget {
                                       Text(holiday.description),
                                       const SizedBox(height: 16),
                                       GuestHolidayScreen( guests: holiday.guests!),
+
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           const Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 8, horizontal: 0),
+                                            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
                                             child: Text(
                                               "Activités",
                                               style: TextStyle(
@@ -288,15 +289,26 @@ class HolidayDetailScreen extends StatelessWidget {
                                               ),
                                             ),
                                           ),
+
+                                          IconButton(
+                                            onPressed: () {
+                                              viewModel.trierListe();
+                                            },
+                                            icon: Icon(
+                                              viewModel.triCroissant ? Icons.arrow_downward : Icons.arrow_upward,
+                                            ),
+                                          ),
+                                          Spacer(),
                                           IconButton(
                                             onPressed: () {
                                               viewModel.goToCreateActivity();
                                             },
-                                            icon: const Icon(Icons.add),
+                                            icon: Icon(Icons.add),
                                           ),
                                         ],
                                       ),
-                                     ActivityListScreen(id: id, activities: viewModel.activities, onUpdated: viewModel.refreshData()),
+
+                                      ActivityListScreen(id: id, activities: viewModel.activities, onUpdated: viewModel.refreshData()),
                                     ],
                                   )),
                             ),
