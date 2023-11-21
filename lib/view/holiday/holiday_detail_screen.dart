@@ -105,7 +105,7 @@ class HolidayDetailScreen extends StatelessWidget {
                             },
                           );
                         } else if (value == "exporter") {
-                          // TODO : export a implémenter
+                          viewModel.downloadICSFile(id);
                         } else if (value == "ajouterParticipant") {
                           // TODO : ajouter vérification si l'utilisateur existe
                           Widget cancelButton = TextButton(
