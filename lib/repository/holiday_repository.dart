@@ -24,4 +24,6 @@ abstract class HolidayRepository {
 
   Future<Weather> getWeather(String id) ;
 
+  Future<void> downloadICSFile(String id);
+
 }

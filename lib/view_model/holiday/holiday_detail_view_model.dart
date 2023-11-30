@@ -116,4 +116,8 @@ class HolidayDetailViewModel extends ChangeNotifier {
     notifyListeners();
   }
   bool get triCroissant => _triCroissant;
+
+  Future<void>  downloadICSFile(String id) async {
+    var response = await _holidayRepository.downloadICSFile(id);
+  }
 }
