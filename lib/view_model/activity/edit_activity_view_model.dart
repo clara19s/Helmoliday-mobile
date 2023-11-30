@@ -37,6 +37,7 @@ class EditActivityViewModel extends ChangeNotifier{
     required String description,
     required DateTimeRange dateTimeRange,
     required Address address,
+    required ActivityCategory category
   }) async {
 _isLoading = true;
 notifyListeners();
@@ -47,6 +48,7 @@ notifyListeners();
       startDate: dateTimeRange.start,
       endDate: dateTimeRange.end,
       address: address,
+      category: category
     ));
     _isLoading = false;
     notifyListeners();

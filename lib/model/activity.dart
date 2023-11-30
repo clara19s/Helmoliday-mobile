@@ -8,15 +8,16 @@ class Activity {
   final DateTime startDate;
   final DateTime endDate;
   final Address address;
+  final ActivityCategory category;
 
-  Activity({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.startDate,
-    required this.endDate,
-    required this.address,
-  });
+  Activity(
+      {required this.id,
+      required this.name,
+      required this.description,
+      required this.startDate,
+      required this.endDate,
+      required this.address,
+      required this.category});
 
   factory Activity.fromJson(Map<String, dynamic> json) {
     return Activity(
@@ -26,6 +27,8 @@ class Activity {
       startDate: DateUtility.parseDate(json['startDate']),
       endDate: DateUtility.parseDate(json['endDate']),
       address: Address.fromJson(json['address']),
+      category: ActivityCategory.values.firstWhere(
+          (e) => e.toString() == 'ActivityCategory.${json['category'].toLowerCase()}'),
     );
   }
 
@@ -36,5 +39,33 @@ class Activity {
         'startDate': DateUtility.toFormattedString(startDate),
         'endDate': DateUtility.toFormattedString(endDate),
         'address': address.toJson(),
+        'category': category.toString().split('.').last
       };
+}
+
+enum ActivityCategory {
+  entertainment,
+  cultural,
+  sport,
+  gastronomic,
+  other
+}
+
+extension ActivityCategoryExtension on ActivityCategory {
+  String get label {
+    switch (this) {
+      case ActivityCategory.entertainment:
+        return "Divertissement";
+      case ActivityCategory.cultural:
+        return "Culturel";
+      case ActivityCategory.sport:
+        return "Sport";
+      case ActivityCategory.gastronomic:
+        return "Gastronomie";
+      case ActivityCategory.other:
+        return "Autre";
+      default:
+        return toString().split('.').last;
+    }
+  }
 }

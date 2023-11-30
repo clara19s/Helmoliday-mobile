@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../model/activity.dart';
 import '../../view_model/activity/edit_activity_view_model.dart';
 import '../../widget/activity/activity_form.dart';
 
@@ -44,6 +43,7 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
                             description: editedActivity['description'],
                             dateTimeRange: editedActivity['dateTimeRange'],
                             address: editedActivity['address'],
+                            category: editedActivity['category'],
                           );
                         },
                       );

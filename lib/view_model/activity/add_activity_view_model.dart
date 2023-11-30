@@ -25,7 +25,9 @@ class AddActivityViewModel extends ChangeNotifier{
     required String name,
     required String description,
     required DateTimeRange dateTimeRange,
-    required Address address }) async {
+    required Address address,
+    required ActivityCategory category
+  }) async {
     _isLoading = true;
     notifyListeners();
 
@@ -36,6 +38,7 @@ class AddActivityViewModel extends ChangeNotifier{
       startDate: dateTimeRange.start,
       endDate: dateTimeRange.end,
       address: address,
+      category: category
     ));
     _isLoading = false;
     notifyListeners();

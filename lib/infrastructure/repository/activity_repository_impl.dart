@@ -22,11 +22,11 @@ class ActivityRepositoryImp implements ActivityRepository{
   @override
   Future<List<Activity>> getActivities(String id) async {
    var reponse = await _apiService.get("/activities/holiday/$id");
+   var test = reponse.data as List;
    return (reponse.data as List)
     .map((activity) => Activity.fromJson(activity))
     .toList();
   }
-
 
   @override
   Future<void> updateActivity(String activityId, Activity activity) async {
@@ -38,5 +38,4 @@ class ActivityRepositoryImp implements ActivityRepository{
     var response = await _apiService.get("/activities/$id");
     return Activity.fromJson(response.data);
   }
-
 }

@@ -3,6 +3,7 @@ import 'package:helmoliday/theme.dart';
 import 'package:helmoliday/view/activity/activity_list_screen.dart';
 import 'package:helmoliday/view/holiday/guest_holiday_screen.dart';
 import 'package:helmoliday/view/weather_screen.dart';
+import 'package:helmoliday/widget/activity/activity_filter_widget.dart';
 import 'package:helmoliday/widget/holiday/holiday_banner.dart';
 import 'package:provider/provider.dart';
 
@@ -16,13 +17,11 @@ class HolidayDetailScreen extends StatelessWidget {
   final TextEditingController _controller = TextEditingController();
   bool triCroissant = true;
 
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<HolidayDetailViewModel>(
       create: (nContext) => HolidayDetailViewModel(nContext, id),
       child: Consumer<HolidayDetailViewModel>(
-
         builder: (context, viewModel, child) => Scaffold(
           appBar: AppBar(
             title: const Text('Détails'),
@@ -196,7 +195,6 @@ class HolidayDetailScreen extends StatelessWidget {
                       },
                     );
                   } else {
-                    // Affichez un widget alternatif (comme un spinner de chargement) si les données ne sont pas encore disponibles
                     return const Placeholder(
                       fallbackHeight: 1,
                       fallbackWidth: 1,
@@ -270,12 +268,13 @@ class HolidayDetailScreen extends StatelessWidget {
                                       const SizedBox(height: 4),
                                       Text(holiday.description),
                                       const SizedBox(height: 16),
-                                      GuestHolidayScreen( guests: holiday.guests!),
-
+                                      GuestHolidayScreen(
+                                          guests: holiday.guests!),
                                       Row(
                                         children: [
                                           const Padding(
-                                            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 8, horizontal: 0),
                                             child: Text(
                                               "Activités",
                                               style: TextStyle(
@@ -284,13 +283,14 @@ class HolidayDetailScreen extends StatelessWidget {
                                               ),
                                             ),
                                           ),
-
                                           IconButton(
                                             onPressed: () {
                                               viewModel.trierListe();
                                             },
                                             icon: Icon(
-                                              viewModel.triCroissant ? Icons.arrow_downward : Icons.arrow_upward,
+                                              viewModel.triCroissant
+                                                  ? Icons.arrow_downward
+                                                  : Icons.arrow_upward,
                                             ),
                                           ),
                                           Spacer(),
@@ -302,8 +302,15 @@ class HolidayDetailScreen extends StatelessWidget {
                                           ),
                                         ],
                                       ),
-
-                                      ActivityListScreen(id: id, activities: viewModel.activities, onUpdated: viewModel.refreshData()),
+                                      const SizedBox(height: 4),
+                                      ActivityFilter(
+                                          filters: viewModel.filters,
+                                        onCategorySelected: viewModel.updateFilters,
+                                      ),
+                                      ActivityListScreen(
+                                          id: id,
+                                          activities: viewModel.filteredActivities,
+                                          onUpdated: viewModel.refreshData()),
                                     ],
                                   )),
                             ),
