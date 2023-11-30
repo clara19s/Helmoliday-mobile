@@ -5,6 +5,7 @@ import 'package:helmoliday/view/holiday/holiday_chat_screen.dart';
 import 'package:helmoliday/view/holiday/holiday_map_screen.dart';
 import 'package:helmoliday/view/holiday/holidays_screen.dart';
 
+import '../view/activity/activity_map_screen.dart';
 import '../view/activity/add_activity_screen.dart';
 import '../view/auth/login_screen.dart';
 import '../view/auth/register_screen.dart';
@@ -70,6 +71,11 @@ class NavigationService {
           path: '/activities/edit/:id',
           builder: (context, state) =>
                EditActivityScreen(id: state.pathParameters['id']!)),
-    ],
+      GoRoute(
+    path: '/activities/map/:id',
+    builder: (context, state) =>
+        ActivityMapScreen(id: state.pathParameters['id']!),
+  ),
+  ],
   );
 }

@@ -47,6 +47,9 @@ class HolidayDetailViewModel extends ChangeNotifier {
   void goToHolidayMap() {
     _context.push('/holidays/map/$id');
   }
+  void goToActivityMap(String id) {
+    _context.push('/activities/map/$id');
+  }
 
   void goToHolidayChat() {
     _context.push('/holidays/chat/$id');

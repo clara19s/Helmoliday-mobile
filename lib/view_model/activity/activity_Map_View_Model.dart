@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../model/activity.dart';
+import 'package:helmoliday/model/lat_lng.dart' as helmo;
+
 import '../../repository/activity_repository.dart';
 import '../../service/location_service.dart';
-import '../../widget/common/itinerary_info.dart';
+
 
 class ActivityMapViewModel extends ChangeNotifier {
   late final ActivityRepository _activityRepository;
@@ -43,4 +46,30 @@ class ActivityMapViewModel extends ChangeNotifier {
       polylineCoordinates: directions['polyline'],
     );
   }
+
+  Future<void> goToNavigation() async {
+    await launchUrl(Uri.parse(
+        'google.navigation:q=${Uri.encodeFull(activity.address.toString())}'));
+    return Future.value();
+  }
+}
+
+class ItineraryInfo {
+  helmo.LatLng boundsNe;
+  helmo.LatLng boundsSw;
+  helmo.LatLng startLocation;
+  helmo.LatLng endLocation;
+  Duration duration;
+  String distance;
+  List<helmo.LatLng> polylineCoordinates;
+
+  ItineraryInfo({
+    required this.boundsNe,
+    required this.boundsSw,
+    required this.startLocation,
+    required this.endLocation,
+    required this.duration,
+    required this.distance,
+    required this.polylineCoordinates,
+  });
 }
