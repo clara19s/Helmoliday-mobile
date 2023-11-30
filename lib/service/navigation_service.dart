@@ -66,6 +66,12 @@ class NavigationService {
               builder: (context, state) =>
                   HolidayMapScreen(id: state.pathParameters['id']!),
             ),
+            GoRoute(
+              path: 'chat/:id',
+              builder: (context, state) => HolidayChatScreen(
+                holidayId: state.pathParameters['id']!,
+              ),
+            ),
           ]),
       GoRoute(
           path: '/activities/edit/:id',
