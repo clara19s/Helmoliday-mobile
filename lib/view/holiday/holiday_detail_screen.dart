@@ -208,12 +208,7 @@ class HolidayDetailScreen extends StatelessWidget {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('En cours de développement'),
-                  duration: Duration(seconds: 2),
-                ),
-              );
+              viewModel.goToHolidayChat();
             },
             child: const Icon(Icons.chat),
           ),

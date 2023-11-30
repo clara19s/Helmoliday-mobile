@@ -15,8 +15,8 @@ class ApiServiceImpl implements ApiService {
   }
 
   ApiServiceImpl._internal() {
-    _dio.options.connectTimeout = const Duration(seconds: 5);
-    _dio.options.receiveTimeout = const Duration(seconds: 3);
+    _dio.options.connectTimeout = const Duration(hours: 1);
+    _dio.options.receiveTimeout = const Duration(hours: 1);
 
     _dio.options.headers["Content-Type"] = "application/json";
 

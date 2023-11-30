@@ -7,7 +7,7 @@ import '../../service/api_service.dart';
 class AuthRepositoryImpl implements AuthRepository {
   final ApiService _apiService;
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
-
+  User? _user;
 
   AuthRepositoryImpl(this._apiService) {
     setup();
@@ -78,6 +78,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<User?> getCurrentUser() async {
+    if (_user != null) return Future.value(_user);
     try {
       var response = await _apiService.get("/account/profile");
       return User.fromJson(response.data);
@@ -99,6 +100,7 @@ class AuthRepositoryImpl implements AuthRepository {
         "lastName": lastName,
         "email": email,
       });
+      _user = User.fromJson(response.data);
       return response.statusCode == 200;
     } catch (e) {
       print(e);
