@@ -24,6 +24,9 @@ class ProfileViewModel extends ChangeNotifier {
   late final AuthRepository _authRepository;
   late final BuildContext _context;
 
+  String? _errorMessage;
+  String? get errorMessage => _errorMessage;
+
   ProfileViewModel(BuildContext context) {
     _context = context;
     _authRepository = context.read<AuthRepository>();
@@ -48,6 +51,7 @@ class ProfileViewModel extends ChangeNotifier {
     required String email,
   }) async {
     var result = false;
+    _errorMessage = null;
     _isLoading = true;
     try {
       final changeResult = await _authRepository.updateProfile(
@@ -57,6 +61,7 @@ class ProfileViewModel extends ChangeNotifier {
       );
       result = changeResult;
     } catch (e) {
+      _errorMessage = 'Erreur lors de la mise à jour du profil';
       print(e);
     }
     return result;
