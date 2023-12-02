@@ -27,6 +27,14 @@ class _AddScreenHolidayState extends State<AddHolidayScreen> {
               child: model.isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : HolidayForm(onSave: (result) async {
+                    if (model.errorMessage != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(model.errorMessage!),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
                       model.addHoliday(
                           name: result['name'],
                           description: result['description'],

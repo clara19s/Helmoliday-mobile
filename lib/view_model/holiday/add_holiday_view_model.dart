@@ -9,8 +9,13 @@ import '../../repository/holiday_repository.dart';
 class AddHolidayViewModel extends ChangeNotifier {
   late final HolidayRepository _holidaysRepository;
   bool _isLoading = false;
-
   bool get isLoading => _isLoading;
+
+  String? _errorMessage;
+  String? get errorMessage => _errorMessage;
+
+
+
 
   late BuildContext _context;
 
@@ -25,20 +30,23 @@ class AddHolidayViewModel extends ChangeNotifier {
       required DateTimeRange dateTimeRange,
       required Address address}) async {
     _isLoading = true;
+    _errorMessage = null;
     notifyListeners();
-
-    _holidaysRepository.createHoliday(Holiday(
-      name: name,
-      description: description,
-      startDate: dateTimeRange.start,
-      endDate: dateTimeRange.end,
-      address: address,
-      published: false,
-    ));
-
-    _isLoading = false;
-    notifyListeners();
-
+    try {
+      _holidaysRepository.createHoliday(Holiday(
+        name: name,
+        description: description,
+        startDate: dateTimeRange.start,
+        endDate: dateTimeRange.end,
+        address: address,
+        published: false,
+      ));
+    } catch (e) {
+      _errorMessage = 'Erreur lors de la création de la vacance. Veuillez réessayer.';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
     _context.pop();
   }
 }

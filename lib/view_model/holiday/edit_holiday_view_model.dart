@@ -14,6 +14,10 @@ class EditHolidayViewModel extends ChangeNotifier {
   late BuildContext _context;
   late Future<Holiday> holiday;
 
+  String? _errorMessage;
+  String? get errorMessage => _errorMessage;
+
+
   EditHolidayViewModel(BuildContext context, this.id) {
     _context = context;
     _holidaysRepository = context.read<HolidayRepository>();
@@ -30,20 +34,23 @@ class EditHolidayViewModel extends ChangeNotifier {
         required DateTimeRange dateTimeRange,
         required Address address}) async {
     _isLoading = true;
+    _errorMessage = null;
     notifyListeners();
-
-    _holidaysRepository.updateHoliday(id, Holiday(
-      name: name,
-      description: description,
-      startDate: dateTimeRange.start,
-      endDate: dateTimeRange.end,
-      address: address,
-      published: false,
-    ));
-
-    _isLoading = false;
-    notifyListeners();
-
+    try {
+      _holidaysRepository.updateHoliday(id, Holiday(
+        name: name,
+        description: description,
+        startDate: dateTimeRange.start,
+        endDate: dateTimeRange.end,
+        address: address,
+        published: false,
+      ));
+    } catch (e) {
+      _errorMessage = 'Erreur lors de la création de la vacance. Veuillez réessayer.';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
     _context.pop();
   }
 }

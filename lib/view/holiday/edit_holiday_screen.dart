@@ -37,6 +37,14 @@ class _EditScreenHolidayState extends State<EditHolidayScreen> {
                             end: snapshot.data!.endDate),
                         address: snapshot.data!.address,
                         onSave: (editedHoliday) {
+                          if (model.errorMessage != null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(model.errorMessage!),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
                           model.editHoliday(
                             name: editedHoliday['name'],
                             description: editedHoliday['description'],
