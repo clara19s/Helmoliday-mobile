@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../model/activity.dart';
 import '../../view_model/activity/edit_activity_view_model.dart';
 import '../../widget/activity/activity_form.dart';
 
@@ -37,13 +38,16 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
                             start: snapshot.data!.startDate,
                             end: snapshot.data!.endDate),
                         address: snapshot.data!.address,
+                        category: snapshot.data!.category.name,
                         onSave: (editedActivity) {
+                          var category = ActivityCategory.values.firstWhere(
+                                  (e) => e.toString() == 'ActivityCategory.${editedActivity['category'].toLowerCase()}');
                           model.editActivity(
                             name: editedActivity['name'],
                             description: editedActivity['description'],
                             dateTimeRange: editedActivity['dateTimeRange'],
                             address: editedActivity['address'],
-                            category: editedActivity['category'],
+                            category: category,
                           );
                         },
                       );

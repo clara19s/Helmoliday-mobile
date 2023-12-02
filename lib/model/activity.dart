@@ -39,7 +39,7 @@ class Activity {
         'startDate': DateUtility.toFormattedString(startDate),
         'endDate': DateUtility.toFormattedString(endDate),
         'address': address.toJson(),
-        'category': category.toString().split('.').last
+        'category': _capitalizeFirstLetter(category.toString().split('.').last),
       };
 }
 
@@ -68,4 +68,9 @@ extension ActivityCategoryExtension on ActivityCategory {
         return toString().split('.').last;
     }
   }
+}
+
+String _capitalizeFirstLetter(String str) {
+  if (str.isEmpty) return str;
+  return str[0].toUpperCase() + str.substring(1);
 }

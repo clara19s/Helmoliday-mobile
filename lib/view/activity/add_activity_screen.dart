@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:helmoliday/model/activity.dart';
 import 'package:provider/provider.dart';
 
 import '../../view_model/activity/add_activity_view_model.dart';
@@ -11,7 +11,7 @@ class AddActivityScreen extends StatefulWidget {
   final String id;
 
   @override
-  _AddActivityScreenState createState() => _AddActivityScreenState();
+  State<AddActivityScreen> createState() => _AddActivityScreenState();
 }
 
 class _AddActivityScreenState extends State<AddActivityScreen> {
@@ -30,12 +30,15 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
               child: model.isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : ActivityForm(onSave: (result) async {
+                      var category = ActivityCategory.values.firstWhere((e) =>
+                          e.toString() ==
+                          'ActivityCategory.${result['category'].toLowerCase()}');
                       model.addActivity(
                         name: result['name'],
                         description: result['description'],
                         dateTimeRange: result['dateTimeRange'],
                         address: result['address'],
-                        category: result['category'],
+                        category: category,
                       );
                     }),
             ),

@@ -31,7 +31,7 @@ class AddActivityViewModel extends ChangeNotifier{
     _isLoading = true;
     notifyListeners();
 
-    _activityRepository.createActivity(id, Activity(
+    await _activityRepository.createActivity(id, Activity(
       id : id,
       name: name,
       description: description,
@@ -42,6 +42,8 @@ class AddActivityViewModel extends ChangeNotifier{
     ));
     _isLoading = false;
     notifyListeners();
-    _context.pop();
+    if (_context.mounted && Navigator.canPop(_context)) {
+      Navigator.pop(_context);
+    }
   }
 }

@@ -293,12 +293,12 @@ class HolidayDetailScreen extends StatelessWidget {
                                                   : Icons.arrow_upward,
                                             ),
                                           ),
-                                          Spacer(),
+                                          const Spacer(),
                                           IconButton(
                                             onPressed: () {
                                               viewModel.goToCreateActivity();
                                             },
-                                            icon: Icon(Icons.add),
+                                            icon: const Icon(Icons.add),
                                           ),
                                         ],
                                       ),
@@ -309,8 +309,7 @@ class HolidayDetailScreen extends StatelessWidget {
                                       ),
                                       ActivityListScreen(
                                           id: id,
-                                          activities: viewModel.filteredActivities,
-                                          onUpdated: viewModel.refreshData()),
+                                          activities: viewModel.filteredActivities),
                                     ],
                                   )),
                             ),

@@ -9,12 +9,10 @@ class ActivityListScreen extends StatefulWidget {
   const ActivityListScreen(
       {super.key,
       required this.id,
-      required this.activities,
-      required this.onUpdated});
+      required this.activities});
 
   final String id;
   final List<Activity> activities;
-  final Future<void> onUpdated;
 
   @override
   State<ActivityListScreen> createState() => _ActivityListScreen();
@@ -32,7 +30,7 @@ class _ActivityListScreen extends State<ActivityListScreen> {
             itemBuilder: (context, index) {
               var activity = widget.activities[index];
               return Dismissible(
-                key: Key(activity.id!),
+                key: Key(activity.id),
                 direction: DismissDirection.endToStart,
                 background: Container(
                   color: Colors.red,
@@ -48,7 +46,7 @@ class _ActivityListScreen extends State<ActivityListScreen> {
                   ),
                 ),
                 onDismissed: (direction) {
-                  viewModel.deleteActivity(activity.id!);
+                  viewModel.deleteActivity(activity.id);
                 },
                 child: ListTile(
                   title: Text(activity.name),
@@ -74,9 +72,9 @@ class _ActivityListScreen extends State<ActivityListScreen> {
                     ],
                     onSelected: (value) {
                       if (value == 'edit') {
-                        viewModel.goToEditActivity(activity.id!);
+                        viewModel.goToEditActivity(activity.id);
                       } else if (value == 'delete') {
-                        viewModel.deleteActivity(activity.id!);
+                        viewModel.deleteActivity(activity.id);
                       }
                     },
                   ),

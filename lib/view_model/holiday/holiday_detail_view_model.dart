@@ -62,10 +62,12 @@ class HolidayDetailViewModel extends ChangeNotifier {
 
   Future<void> refreshData() async {
     holiday = _getHoliday(id);
+    notifyListeners();
   }
 
-  void addParticipant(String email) {
-    _holidayRepository.addParticipant(id, email);
+  Future<void> addParticipant(String email) async {
+    await _holidayRepository.addParticipant(id, email);
+    refreshData();
   }
 
   void exitHoliday() {
@@ -90,7 +92,6 @@ class HolidayDetailViewModel extends ChangeNotifier {
     List<Activity> activities = await _getActivities(id);
     _allActivities = activities;
     applyFilters();
-    notifyListeners();
   }
 
   void applyFilters() {

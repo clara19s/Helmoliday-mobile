@@ -13,12 +13,14 @@ class ActivityForm extends StatefulWidget {
     this.description,
     this.dateTimeRange,
     this.address,
+    this.category,
   });
 
   final String? name;
   final String? description;
   final DateTimeRange? dateTimeRange;
   final Address? address;
+  final String? category;
   final Function(Map<String, dynamic>) onSave;
 
   @override
@@ -34,6 +36,7 @@ class _activityFormState extends State<ActivityForm> {
   final TextEditingController postalCodeController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
   final TextEditingController countryController = TextEditingController();
+  final TextEditingController categoryController = TextEditingController();
 
   @override
   void initState() {
@@ -43,6 +46,11 @@ class _activityFormState extends State<ActivityForm> {
     if (widget.name != null) nameController.text = widget.name!;
     if (widget.description != null) {
       descriptionController.text = widget.description!;
+    }
+    if (widget.category != null) {
+      categoryController.text = widget.category!;
+    } else {
+      categoryController.text = 'entertainment';
     }
     if (widget.address != null) {
       streetController.text = widget.address!.street;
@@ -80,6 +88,39 @@ class _activityFormState extends State<ActivityForm> {
           ),
         ),
         const SizedBox(height: 16),
+        DropdownButtonFormField(
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Catégorie de l\'activité',
+          ),
+          value: categoryController.text,
+          items: const [
+            DropdownMenuItem(
+              value: 'sport',
+              child: Text('Sport'),
+            ),
+            DropdownMenuItem(
+              value: 'cultural',
+              child: Text('Culture'),
+            ),
+            DropdownMenuItem(
+              value: 'entertainment',
+              child: Text('Divertissement'),
+            ),
+            DropdownMenuItem(
+              value: 'gastronomic',
+              child: Text('Gastronomique'),
+            ),
+            DropdownMenuItem(
+              value: 'other',
+              child: Text('Autre'),
+            ),
+          ],
+          onChanged: (value) {
+            categoryController.text = value.toString();
+          },
+        ),
+        const SizedBox(height: 16),
         DateTimeRangePicker(
             initialDateRange: widget.dateTimeRange,
             onChanged: (dateTimeRange) {}),
@@ -111,6 +152,7 @@ class _activityFormState extends State<ActivityForm> {
                       city: cityController.text,
                       country: countryController.text,
                     ),
+                    "category": categoryController.text,
                   });
                   isLoading = false;
 

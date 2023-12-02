@@ -76,12 +76,16 @@ class NavigationService {
       GoRoute(
           path: '/activities/edit/:id',
           builder: (context, state) =>
-               EditActivityScreen(id: state.pathParameters['id']!)),
+              EditActivityScreen(id: state.pathParameters['id']!)),
       GoRoute(
-    path: '/activities/map/:id',
-    builder: (context, state) =>
-        ActivityMapScreen(id: state.pathParameters['id']!),
-  ),
-  ],
+          path: '/activities/add/:id',
+          builder: (context, state) =>
+              AddActivityScreen(id: state.pathParameters['id']!)),
+      GoRoute(
+        path: '/activities/map/:id',
+        builder: (context, state) =>
+            ActivityMapScreen(id: state.pathParameters['id']!),
+      ),
+    ],
   );
 }

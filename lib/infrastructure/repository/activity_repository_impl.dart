@@ -3,15 +3,17 @@ import 'package:helmoliday/repository/activity_repository.dart';
 
 import '../../service/api_service.dart';
 
-class ActivityRepositoryImp implements ActivityRepository{
+class ActivityRepositoryImp implements ActivityRepository {
   final ApiService _apiService;
 
   ActivityRepositoryImp(this._apiService);
+
   @override
   Future<void> createActivity(String holidayId, Activity activity) async {
-     var response = await _apiService.post("/activities/holiday/$holidayId", data: activity.toJson());
+    var response = await _apiService.post("/activities/holiday/$holidayId",
+        data: activity.toJson());
 
-     print(response);
+    print(response);
   }
 
   @override
@@ -21,20 +23,21 @@ class ActivityRepositoryImp implements ActivityRepository{
 
   @override
   Future<List<Activity>> getActivities(String id) async {
-   var reponse = await _apiService.get("/activities/holiday/$id");
-   var test = reponse.data as List;
-   return (reponse.data as List)
-    .map((activity) => Activity.fromJson(activity))
-    .toList();
+    var reponse = await _apiService.get("/activities/holiday/$id");
+    return (reponse.data as List)
+        .map((activity) => Activity.fromJson(activity))
+        .toList();
   }
 
   @override
   Future<void> updateActivity(String activityId, Activity activity) async {
-    var response = await _apiService.put("/activities/$activityId", data: activity.toJson());
+    var data = activity.toJson();
+    var response = await _apiService.put("/activities/$activityId",
+        data: data);
     print(response.data);
   }
 
-  Future<Activity> getDetailActivity (String id) async {
+  Future<Activity> getDetailActivity(String id) async {
     var response = await _apiService.get("/activities/$id");
     return Activity.fromJson(response.data);
   }

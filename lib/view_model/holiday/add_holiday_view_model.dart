@@ -9,13 +9,11 @@ import '../../repository/holiday_repository.dart';
 class AddHolidayViewModel extends ChangeNotifier {
   late final HolidayRepository _holidaysRepository;
   bool _isLoading = false;
+
   bool get isLoading => _isLoading;
 
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
-
-
-
 
   late BuildContext _context;
 
@@ -33,7 +31,7 @@ class AddHolidayViewModel extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
     try {
-      _holidaysRepository.createHoliday(Holiday(
+      await _holidaysRepository.createHoliday(Holiday(
         name: name,
         description: description,
         startDate: dateTimeRange.start,

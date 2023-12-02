@@ -22,12 +22,12 @@ class HolidayRepositoryImpl implements HolidayRepository {
 
   @override
   Future<void> createHoliday(Holiday holiday) async {
-    _apiService.post("/holidays", data: holiday.toJson());
+    await _apiService.post("/holidays", data: holiday.toJson());
   }
 
   @override
   Future<void> deleteHoliday(String id) async {
-    _apiService.delete("/holidays/$id");
+    await _apiService.delete("/holidays/$id");
   }
 
   @override
@@ -61,15 +61,14 @@ class HolidayRepositoryImpl implements HolidayRepository {
 
   @override
   Future<void> addParticipant(String holidayId, String email) async {
-
-    await _apiService
+    var response = await _apiService
         .post("/invitations", data: {"email": email, "holidayId": holidayId});
+    print(response.data);
   }
 
   @override
   Future<void> exitHoliday(String id) async {
     await _apiService.delete("/invitations/$id");
-
   }
 
   @override
