@@ -13,6 +13,10 @@ class LoginViewModel extends ChangeNotifier {
   late final AuthRepository _authRepository;
   late final Logger _logger;
 
+  String? _errorMessage;
+  String? get errorMessage => _errorMessage;
+
+
   LoginViewModel(BuildContext context) {
     _context = context;
     _authRepository = context.read<AuthRepository>();
@@ -22,6 +26,7 @@ class LoginViewModel extends ChangeNotifier {
   Future<void> logIn({required String email, required String password}) async {
 
     _isLoading = true;
+    _errorMessage = null;
     notifyListeners();
     try {
       _logger.info('Tentative de connexion avec $email');
@@ -32,8 +37,11 @@ class LoginViewModel extends ChangeNotifier {
       if (user != null && _context.mounted) {
         _context.go('/home');
       }
+      else {
+        _errorMessage = 'Erreur lors de la connexion. Veuillez réessayer.';
+      }
     } catch (e) {
-      // TODO: définir un message d'erreur que la vue devra afficher
+      _errorMessage = 'Erreur lors de la connexion. Veuillez réessayer.';
       _logger.severe('Erreur lors de la connexion', e);
     } finally {
       _isLoading = false;

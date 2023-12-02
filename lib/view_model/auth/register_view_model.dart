@@ -13,6 +13,9 @@ class RegisterViewModel extends ChangeNotifier {
   late final AuthRepository _authRepository;
   late final Logger _logger;
 
+  String? _errorMessage;
+  String? get errorMessage => _errorMessage;
+
   RegisterViewModel(BuildContext context) {
     _context = context;
     _authRepository = context.read<AuthRepository>();
@@ -26,6 +29,7 @@ class RegisterViewModel extends ChangeNotifier {
     required String password,
   }) async {
     _isLoading = true;
+    _errorMessage = null;
     try {
       _logger.info('Tentative d\'inscription avec $email');
       final user = await _authRepository.register(
@@ -37,9 +41,11 @@ class RegisterViewModel extends ChangeNotifier {
       if (user != null && _context.mounted) {
         _context.go('/home');
       }
+      else {
+        _errorMessage = 'Erreur lors de l\'inscription. Veuillez réessayer.';
+      }
     } catch (e) {
       _logger.severe('Erreur lors de l\'inscription', e);
-      // TODO: Transmettre un message d'erreur à la vue
     } finally {
       _isLoading = false;
       notifyListeners();

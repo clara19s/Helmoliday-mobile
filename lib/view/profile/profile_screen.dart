@@ -16,6 +16,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -52,6 +53,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
             body: SingleChildScrollView(
+              child: Form(
+                key: _formKey,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                 child: model.isLoading
@@ -60,7 +63,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           const AvatarPicker(),
                           const SizedBox(height: 16),
-                          TextField(
+                          TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Veuillez entrer votre email';
+                              }
+                              return null;
+                            },
                             controller: _emailController,
                             decoration: const InputDecoration(
                               labelText: "Email",
@@ -68,7 +77,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          TextField(
+                          TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Veuillez entrer votre prénom';
+                              }
+                              return null;
+                            },
                             controller: _firstNameController,
                             decoration: const InputDecoration(
                               labelText: "Prénom",
@@ -76,7 +91,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          TextField(
+                          TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Veuillez entrer votre nom';
+                              }
+                              return null;
+                            },
                             controller: _lastNameController,
                             decoration: const InputDecoration(
                               labelText: "Nom",
@@ -86,14 +107,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           const SizedBox(height: 16),
                           model.isLoading
                               ? const CircularProgressIndicator()
-                              : ElevatedButton(
+                          :Column(
+                            children: [
+                              if (model.errorMessage != null)
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 20.0),
+                                  child: Text(
+                                    model.errorMessage!,
+                                    style: const TextStyle(
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ),
+                               ElevatedButton(
                                   onPressed: () async {
-                                    SystemChannels.textInput
-                                        .invokeMethod('TextInput.hide');
-                                    model.updateProfile(
-                                        firstName: _firstNameController.text,
-                                        lastName: _lastNameController.text,
-                                        email: _emailController.text);
+                                    if (_formKey.currentState!.validate()) {
+                                      SystemChannels.textInput
+                                          .invokeMethod('TextInput.hide');
+                                      model.updateProfile(
+                                          firstName: _firstNameController.text,
+                                          lastName: _lastNameController.text,
+                                          email: _emailController.text);
+                                    }
                                   },
                                   child: const Text(
                                     "Enregistrer",
@@ -106,9 +141,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                         ],
                       ),
+                        ],
+                      ),
               ),
             ),
+          ),
           );
+
         },
       ),
     );

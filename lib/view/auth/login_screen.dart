@@ -17,6 +17,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -32,19 +33,22 @@ class _LoginScreenState extends State<LoginScreen> {
       child: _LoginScreenBody(
           emailController: _emailController,
           passwordController: _passwordController),
+
     );
   }
 }
 
 class _LoginScreenBody extends StatelessWidget {
-  const _LoginScreenBody({
-    required TextEditingController emailController,
+   _LoginScreenBody( {
+     required TextEditingController emailController,
     required TextEditingController passwordController,
   })  : _emailController = emailController,
         _passwordController = passwordController;
 
   final TextEditingController _emailController;
   final TextEditingController _passwordController;
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +59,10 @@ class _LoginScreenBody extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 50, 16, 16),
           child: SingleChildScrollView(
-            child: Column(
+            child: Form(
+              key: _formKey,
+            child:
+            Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
@@ -73,7 +80,15 @@ class _LoginScreenBody extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
-                  child: TextField(
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'L\'adresse e-mail ne peut pas être vide';
+                      } else if (!RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$').hasMatch(value)) {
+                        return 'L\'adresse e-mail n\'est pas valide';
+                      }
+                      return null;
+                    },
                     controller: _emailController,
                     obscureText: false,
                     textAlign: TextAlign.start,
@@ -109,6 +124,7 @@ class _LoginScreenBody extends StatelessWidget {
                         fontSize: 14,
                         color: Color(0xff9f9d9d),
                       ),
+
                       filled: true,
                       fillColor: const Color(0xffe8e8e8),
                       isDense: false,
@@ -120,21 +136,39 @@ class _LoginScreenBody extends StatelessWidget {
                 PasswordField(
                   controller: _passwordController,
                   onChanged: (value) {},
+
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 30, 0, 16),
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 16),
                   child: Consumer<LoginViewModel>(
                     builder: (context, model, child) {
                       return model.isLoading
                           ? const Center(
                         child: CircularProgressIndicator(),
                       )
-                          : MaterialButton(
+                      : Column(
+
+                        children: [
+                          if (model.errorMessage != null)
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 20.0),
+                              child: Text(
+                                model.errorMessage!,
+                                style: const TextStyle(
+                                  color: Colors.red,
+
+                                ),
+
+                              ),
+                            ),
+                           MaterialButton(
                         onPressed: () async {
-                          model.logIn(
-                            email: _emailController.text,
-                            password: _passwordController.text,
-                          );
+                          if (_formKey.currentState!.validate()) {
+                            model.logIn(
+                              email: _emailController.text,
+                              password: _passwordController.text,
+                            );
+                          }
                         },
                         color: const Color(0xff1070b7),
                         elevation: 0,
@@ -153,7 +187,12 @@ class _LoginScreenBody extends StatelessWidget {
                             fontStyle: FontStyle.normal,
                           ),
                         ),
+
+                      ),
+
+                        ],
                       );
+
                     },
                   ),
                 ),
@@ -190,6 +229,7 @@ class _LoginScreenBody extends StatelessWidget {
           ),
         ),
       ),
+    ),
     );
   }
 }

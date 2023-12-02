@@ -34,6 +34,8 @@ class _HolidayFormState extends State<HolidayForm> {
   final TextEditingController cityController = TextEditingController();
   final TextEditingController countryController = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -54,16 +56,26 @@ class _HolidayFormState extends State<HolidayForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Form (
+      key: _formKey,
+      child:
+    Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+
         const Text(
           "Informations générales",
           style: TextStyle(fontSize: 24),
         ),
         const SizedBox(height: 8),
-        TextField(
+        TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Veuillez entrer un nom";
+            }
+            return null;
+          },
           controller: nameController,
           decoration: const InputDecoration(
             labelText: "Nom de la période",
@@ -71,7 +83,13 @@ class _HolidayFormState extends State<HolidayForm> {
           ),
         ),
         const SizedBox(height: 8),
-        TextField(
+        TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Veuillez entrer une description";
+            }
+            return null;
+          },
           controller: descriptionController,
           maxLines: 5,
           decoration: const InputDecoration(
@@ -96,25 +114,30 @@ class _HolidayFormState extends State<HolidayForm> {
         const SizedBox(height: 16),
         isLoading
             ? const CircularProgressIndicator()
-            : ElevatedButton(
+        :Column(
+          children : [
+
+             ElevatedButton(
                 onPressed: () async {
-                  isLoading = true;
-                  await widget.onSave({
-                    "name": nameController.text,
-                    "description": descriptionController.text,
-                    "dateTimeRange": DateTimeRange(
-                      start: DateTime.now(),
-                      end: DateTime.now(),
-                    ),
-                    "address": Address(
-                      street: streetController.text,
-                      streetNumber: streetNumberController.text,
-                      postalCode: postalCodeController.text,
-                      city: cityController.text,
-                      country: countryController.text,
-                    ),
-                  });
-                  isLoading = false;
+    if (_formKey.currentState!.validate()) {
+      isLoading = true;
+      await widget.onSave({
+        "name": nameController.text,
+        "description": descriptionController.text,
+        "dateTimeRange": DateTimeRange(
+          start: DateTime.now(),
+          end: DateTime.now(),
+        ),
+        "address": Address(
+          street: streetController.text,
+          streetNumber: streetNumberController.text,
+          postalCode: postalCodeController.text,
+          city: cityController.text,
+          country: countryController.text,
+        ),
+      });
+      isLoading = false;
+    }
                 },
                 child: const Text(
                   "Enregistrer",
@@ -126,6 +149,9 @@ class _HolidayFormState extends State<HolidayForm> {
                 ),
               ),
       ],
+    ),
+      ],
+    )
     );
   }
 }

@@ -22,6 +22,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void dispose() {
     _firstNameController.dispose();
@@ -42,6 +44,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 50, 16, 16),
               child: SingleChildScrollView(
+                child : Form(
+                  key: _formKey,
+
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,35 +65,55 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
-                      child: TextField(
+                      child: TextFormField(
                         controller: _firstNameController,
                         decoration: const InputDecoration(
                           prefixIcon: Icon(Icons.badge),
                           labelText: "Prénom",
                           hintText: "John",
                         ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Le prénom ne peut pas être vide';
+                          }
+                          return null;
+                        },
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                      child: TextField(
+                      child: TextFormField(
                         controller: _lastNameController,
                         decoration: const InputDecoration(
                           prefixIcon: Icon(Icons.badge),
                           labelText: "Nom",
                           hintText: "Doe",
                         ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Le nom ne peut pas être vide';
+                          }
+                          return null;
+                        },
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                      child: TextField(
+                      child: TextFormField(
                         controller: _emailController,
                         decoration: const InputDecoration(
                           prefixIcon: Icon(Icons.mail),
                           labelText: "Adresse e-mail",
                           hintText: "john@doe.com",
                         ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'L\'adresse e-mail ne peut pas être vide';
+                          } else if (!RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$').hasMatch(value)) {
+                            return 'L\'adresse e-mail n\'est pas valide';
+                          }
+                          return null;
+                        },
                       ),
                     ),
                     PasswordField(
@@ -103,19 +128,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ? const Center(
                                   child: CircularProgressIndicator(),
                                 )
-                              : ElevatedButton(
+                          :Column(
+                            children: [
+                              if (model.errorMessage != null) ...[
+                                const SizedBox(height: 10),
+                                Text(
+                                  model.errorMessage!,
+                                  style: const TextStyle(
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ],
+                              ElevatedButton(
                                   onPressed: () async {
-                                    model.register(
-                                      firstName: _firstNameController.text,
-                                      lastName: _lastNameController.text,
-                                      email: _emailController.text,
-                                      password: _passwordController.text,
-                                    );
+    if (_formKey.currentState!.validate()) {
+      model.register(
+        firstName: _firstNameController.text,
+        lastName: _lastNameController.text,
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+    }
                                   },
                                   child: const Text(
                                     "Se connecter",
                                   ),
-                                );
+                                ),
+
+                            ],
+                          );
                         },
                       ),
                     ),
@@ -152,6 +193,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ),
           ),
+        ),
         ));
   }
 }

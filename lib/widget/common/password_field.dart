@@ -17,12 +17,23 @@ class PasswordField extends StatefulWidget {
 class PasswordFieldState extends State<PasswordField> {
   bool _obscureText = true;
 
+
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: widget.controller,
       obscureText: _obscureText,
       onChanged: widget.onChanged,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Le mot de passe ne peut pas être vide';
+        } else if (value.length < 8) {
+          return 'Le mot de passe doit faire au moins 8 caractères';
+        } else if (!RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$').hasMatch(value)) {
+          return 'Le mot de passe doit contenir au moins une majuscule, \n une minuscule, un chiffre et un caractère spécial';
+        }
+        return null;
+      },
       decoration: InputDecoration(
         labelText: "Mot de passe",
         hintText: "••••••••••••",
