@@ -6,14 +6,19 @@ import '../../model/activity.dart';
 import '../../model/address.dart';
 import '../../repository/activity_repository.dart';
 
-class AddActivityViewModel extends ChangeNotifier{
+class AddActivityViewModel extends ChangeNotifier {
   late final ActivityRepository _activityRepository;
 
   final String id;
 
   bool _isLoading = false;
+
   bool get isLoading => _isLoading;
   late BuildContext _context;
+
+  String? _errorMessage;
+
+  String? get errorMessage => _errorMessage;
 
   AddActivityViewModel(BuildContext context, this.id) {
     _context = context;
@@ -21,29 +26,33 @@ class AddActivityViewModel extends ChangeNotifier{
   }
 
   Future<void> addActivity(
-  {
-    required String name,
-    required String description,
-    required DateTimeRange dateTimeRange,
-    required Address address,
-    required ActivityCategory category
-  }) async {
+      {required String name,
+      required String description,
+      required DateTimeRange dateTimeRange,
+      required Address address,
+      required ActivityCategory category}) async {
     _isLoading = true;
     notifyListeners();
-
-    await _activityRepository.createActivity(id, Activity(
-      id : id,
-      name: name,
-      description: description,
-      startDate: dateTimeRange.start,
-      endDate: dateTimeRange.end,
-      address: address,
-      category: category
-    ));
-    _isLoading = false;
-    notifyListeners();
-    if (_context.mounted && Navigator.canPop(_context)) {
-      Navigator.pop(_context);
+    try {
+      await _activityRepository.createActivity(
+          id,
+          Activity(
+              id: id,
+              name: name,
+              description: description,
+              startDate: dateTimeRange.start,
+              endDate: dateTimeRange.end,
+              address: address,
+              category: category));
+    } catch (e) {
+      _errorMessage =
+          'Erreur lors de la création de l\'activité. Veuillez réessayer.';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+      if (_context.mounted && Navigator.canPop(_context)) {
+        Navigator.pop(_context);
+      }
     }
   }
 }

@@ -23,6 +23,8 @@ class ActivityForm extends StatefulWidget {
   final String? category;
   final Function(Map<String, dynamic>) onSave;
 
+
+
   @override
   State<ActivityForm> createState() => _activityFormState();
 }
@@ -37,6 +39,8 @@ class _activityFormState extends State<ActivityForm> {
   final TextEditingController cityController = TextEditingController();
   final TextEditingController countryController = TextEditingController();
   final TextEditingController categoryController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -63,7 +67,10 @@ class _activityFormState extends State<ActivityForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Form(
+      key: _formKey,
+      child:
+     Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -72,7 +79,13 @@ class _activityFormState extends State<ActivityForm> {
           style: TextStyle(fontSize: 16),
         ),
         const SizedBox(height: 8),
-        TextField(
+        TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Veuillez entrer un nom';
+            }
+            return null;
+          },
           controller: nameController,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -80,7 +93,13 @@ class _activityFormState extends State<ActivityForm> {
           ),
         ),
         const SizedBox(height: 16),
-        TextField(
+        TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Veuillez entrer une description';
+            }
+            return null;
+          },
           controller: descriptionController,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -137,29 +156,31 @@ class _activityFormState extends State<ActivityForm> {
             ? const CircularProgressIndicator()
             : ElevatedButton(
                 onPressed: () async {
-                  isLoading = true;
-                  await widget.onSave({
-                    "name": nameController.text,
-                    "description": descriptionController.text,
-                    "dateTimeRange": DateTimeRange(
-                      start: DateTime.now(),
-                      end: DateTime.now(),
-                    ),
-                    "address": Address(
-                      street: streetController.text,
-                      streetNumber: streetNumberController.text,
-                      postalCode: postalCodeController.text,
-                      city: cityController.text,
-                      country: countryController.text,
-                    ),
-                    "category": categoryController.text,
-                  });
-                  isLoading = false;
-
+                  if (_formKey.currentState!.validate()) {
+                    isLoading = true;
+                    await widget.onSave({
+                      "name": nameController.text,
+                      "description": descriptionController.text,
+                      "dateTimeRange": DateTimeRange(
+                        start: DateTime.now(),
+                        end: DateTime.now(),
+                      ),
+                      "address": Address(
+                        street: streetController.text,
+                        streetNumber: streetNumberController.text,
+                        postalCode: postalCodeController.text,
+                        city: cityController.text,
+                        country: countryController.text,
+                      ),
+                      "category": categoryController.text,
+                    });
+                    isLoading = false;
+                  }
                 },
                 child: const Text('Enregistrer'),
               ),
       ],
+    )
     );
   }
 }

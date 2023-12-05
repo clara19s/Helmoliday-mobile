@@ -39,20 +39,25 @@ class EditActivityViewModel extends ChangeNotifier {
       required Address address,
       required ActivityCategory category}) async {
     _isLoading = true;
-    await _activityRepository.updateActivity(
-        id,
-        Activity(
-          id: id,
-          name: name,
-          description: description,
-          startDate: dateTimeRange.start,
-          endDate: dateTimeRange.end,
-          address: address,
-          category: category
-        ));
-    _isLoading = false;
-    notifyListeners();
-
-    _context.pop();
+    try {
+      await _activityRepository.updateActivity(
+          id,
+          Activity(
+              id: id,
+              name: name,
+              description: description,
+              startDate: dateTimeRange.start,
+              endDate: dateTimeRange.end,
+              address: address,
+              category: category));
+    } catch (e) {
+      _isLoading = false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+      if (_context.mounted && Navigator.canPop(_context)) {
+        Navigator.pop(_context);
+      }
+    }
   }
 }

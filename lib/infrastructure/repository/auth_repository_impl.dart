@@ -35,7 +35,8 @@ class AuthRepositoryImpl implements AuthRepository {
 
       return User.fromJson(response.data);
     } catch (e) {
-      print(e);
+      rethrow;
+
     }
     return null;
   }

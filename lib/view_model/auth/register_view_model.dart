@@ -41,10 +41,8 @@ class RegisterViewModel extends ChangeNotifier {
       if (user != null && _context.mounted) {
         _context.go('/home');
       }
-      else {
-        _errorMessage = 'Erreur lors de l\'inscription. Veuillez réessayer.';
-      }
     } catch (e) {
+      _errorMessage = 'Erreur lors de l\'inscription. Veuillez réessayer.';
       _logger.severe('Erreur lors de l\'inscription', e);
     } finally {
       _isLoading = false;

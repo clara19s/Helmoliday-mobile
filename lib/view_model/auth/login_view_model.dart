@@ -37,9 +37,6 @@ class LoginViewModel extends ChangeNotifier {
       if (user != null && _context.mounted) {
         _context.go('/home');
       }
-      else {
-        _errorMessage = 'Erreur lors de la connexion. Veuillez réessayer.';
-      }
     } catch (e) {
       _errorMessage = 'Erreur lors de la connexion. Veuillez réessayer.';
       _logger.severe('Erreur lors de la connexion', e);
