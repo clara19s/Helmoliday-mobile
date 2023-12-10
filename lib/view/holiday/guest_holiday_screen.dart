@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../model/guest.dart';
 
-class GuestHolidayScreen extends StatefulWidget{
+class GuestHolidayScreen extends StatefulWidget {
   const GuestHolidayScreen({super.key, required this.guests});
 
   final List<Guest> guests;
@@ -15,29 +15,33 @@ class GuestHolidayScreen extends StatefulWidget{
   State<GuestHolidayScreen> createState() => _GuestHolidayScreen();
 }
 
-class _GuestHolidayScreen extends State<GuestHolidayScreen>{
+class _GuestHolidayScreen extends State<GuestHolidayScreen> {
   @override
   Widget build(BuildContext context) {
     return ExpandablePanel(
-      header: Text('Participants',
+      header: const Text(
+        'Participants',
         style: TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.w600,
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+        ),
       ),
-      ),
-      collapsed: Text(""),
-      expanded:  ListView.builder(
+      collapsed: const Text(""),
+      expanded: ListView.builder(
         shrinkWrap: true,
         itemCount: widget.guests.length,
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(widget.guests[index].firstName + ' ' + widget.guests[index].lastName),
+            leading: CircleAvatar(
+              backgroundImage:
+                  NetworkImage(widget.guests[index].profilePicture),
+            ),
+            title: Text(widget.guests[index].firstName +
+                ' ' +
+                widget.guests[index].lastName),
           );
         },
       ),
-
-
     );
-
   }
-  }
+}

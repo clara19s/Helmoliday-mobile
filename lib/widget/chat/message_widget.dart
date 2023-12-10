@@ -11,7 +11,8 @@ class MessageWidget extends StatelessWidget {
 
   final String currentUserId;
 
-  const MessageWidget({super.key, required this.message, required this.currentUserId});
+  const MessageWidget(
+      {super.key, required this.message, required this.currentUserId});
 
   @override
   Widget build(BuildContext context) {
@@ -25,76 +26,52 @@ class MessageWidget extends StatelessWidget {
       alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width * 0.7,
+          maxWidth: MediaQuery.of(context).size.width * 0.75,
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            if (!isSender)
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: CircleAvatar(
-                  radius: 16,
-                  backgroundImage: NetworkImage(
-                      'https://picsum.photos/seed/${message.from.id}/200'),
-                ),
-              ),
-            Container(
-              padding: const EdgeInsets.all(8),
-              margin: const EdgeInsets.symmetric(vertical: 4),
-              decoration: BoxDecoration(
-                color:
-                    isSender ? HelmolidayTheme.primaryColor : Colors.grey.shade200,
-                borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(8),
-                  topRight: const Radius.circular(8),
-                  bottomLeft: isSender ? const Radius.circular(8) : Radius.zero,
-                  bottomRight: isSender ? Radius.zero : const Radius.circular(8),
-                ),
-              ),
-              child:
-                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                if (hasText)
-                  Text(
-                    msgData.text!,
-                    style: TextStyle(
-                      color: isSender ? Colors.white : Colors.black,
-                    ),
-                  ),
-                if (hasImages && hasText) const SizedBox(height: 8),
-                if (hasImages)
-                  GridView.count(
-                      crossAxisCount: images.length > 1 ? 2 : 1,
-                      crossAxisSpacing: 4,
-                      mainAxisSpacing: 4,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: images
-                          .map<Widget>((e) => ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: e is XFile
-                                    ? Image.file(
-                                        File(e.path),
-                                        fit: BoxFit.cover,
-                                      )
-                                    : Image.network('$e', fit: BoxFit.cover),
-                              ))
-                          .toList()),
-                    const SizedBox(height: 8),
-                    _getStatus(message, isSender, context)
-              ]),
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          margin: const EdgeInsets.symmetric(vertical: 4),
+          decoration: BoxDecoration(
+            color:
+                isSender ? HelmolidayTheme.primaryColor : Colors.grey.shade200,
+            borderRadius: BorderRadius.only(
+              topLeft: const Radius.circular(8),
+              topRight: const Radius.circular(8),
+              bottomLeft: isSender ? const Radius.circular(8) : Radius.zero,
+              bottomRight: isSender ? Radius.zero : const Radius.circular(8),
             ),
-            if (isSender)
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: CircleAvatar(
-                  radius: 16,
-                  backgroundImage: NetworkImage(
-                      'https://picsum.photos/seed/${message.from.id}/200'),
+          ),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            if (hasText)
+              Text(
+                msgData.text!,
+                style: TextStyle(
+                  color: isSender ? Colors.white : Colors.black,
                 ),
               ),
-          ],
+            if (hasImages && hasText) const SizedBox(height: 8),
+            if (hasImages)
+              GridView.count(
+                  crossAxisCount: images.length > 1 ? 2 : 1,
+                  crossAxisSpacing: 4,
+                  mainAxisSpacing: 4,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: images
+                      .map<Widget>((e) => ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: e is XFile
+                                ? Image.file(
+                                    File(e.path),
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.network('$e', fit: BoxFit.cover),
+                          ))
+                      .toList()),
+            const SizedBox(height: 8),
+            _getStatus(message, isSender, context)
+          ]),
         ),
       ),
     );

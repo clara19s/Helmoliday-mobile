@@ -14,13 +14,15 @@ import 'package:helmoliday/service/toast_service.dart';
 import 'package:helmoliday/theme.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'infrastructure/repository/activity_repository_impl.dart';
 import 'infrastructure/repository/holiday_repository_impl.dart';
 import 'infrastructure/service/fluttertoast_service.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   final NavigationService navigationService = NavigationService();
   final apiService = ApiServiceImpl();
   final authRepository = AuthRepositoryImpl(apiService);

@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:helmoliday/service/api_service.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../service/messaging_service.dart';
 
@@ -11,8 +14,8 @@ class PusherMessagingService implements IMessagingService {
       StreamController<Message>.broadcast();
   final ApiService _apiService;
   final PusherChannelsFlutter pusher = PusherChannelsFlutter.getInstance();
-  final _apiKey = "c79fa94e85416eeb4f1e";
-  final _cluster = "eu";
+  final _apiKey = dotenv.env['PUSHER_API_KEY'];
+  final _cluster = dotenv.env['PUSHER_CLUSTER'];
   String? _channelName;
   PusherChannel? _channel;
 
@@ -20,9 +23,10 @@ class PusherMessagingService implements IMessagingService {
 
   @override
   Future<void> connect(Map<String, dynamic> connectionOptions) async {
+    if (_apiKey == null || _cluster == null) throw Exception("Pusher API key or cluster is not set");
     await pusher.init(
-        apiKey: _apiKey,
-        cluster: _cluster,
+        apiKey: _apiKey!,
+        cluster: _cluster!,
         onError: (String message, int? code, dynamic e) {
           print("Error: ${e.message}");
         },
@@ -50,7 +54,6 @@ class PusherMessagingService implements IMessagingService {
         print("Member removed: $member");
       },
       onEvent: (event) {
-        print("Event received: $event");
         if (event.eventName == "message") {
           final data = jsonDecode(event.data);
           final message = Message.fromJson(data);
@@ -71,9 +74,22 @@ class PusherMessagingService implements IMessagingService {
   Future<bool> sendMessage(Message message) async {
     final data = message.data;
 
+    // Conversion des images locales en Multipart
+    List<MultipartFile> multipartImageList = [];
+    if (data.localImages != null) {
+      for (var image in data.localImages!) {
+        multipartImageList.add(await convertXFileToMultipartFile(image));
+      }
+    }
+
+    var formData = FormData.fromMap({
+      'ClientId': data.clientId,
+      'Text': data.text,
+      'Images': multipartImageList,
+    });
     final response = await _apiService.post(
       '/holidays/${_channel!.channelName.replaceFirst("presence-", "")}/chat/messages',
-      data: data.toRequestMap(),
+      data: formData,
     );
 
     return response.statusCode == 200;
@@ -82,5 +98,10 @@ class PusherMessagingService implements IMessagingService {
   @override
   Stream<Message> getMessagesStream() {
     return _messageStreamController.stream;
+  }
+
+  Future<MultipartFile> convertXFileToMultipartFile(XFile file) async {
+    final bytes = await file.readAsBytes();
+    return MultipartFile.fromBytes(bytes, filename: file.name);
   }
 }

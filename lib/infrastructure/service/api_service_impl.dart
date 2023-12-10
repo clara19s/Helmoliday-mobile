@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../service/api_service.dart';
 
 class ApiServiceImpl implements ApiService {
   final Dio _dio =
-      Dio(BaseOptions(baseUrl: "https://porthos-intra.cg.helmo.be/Q210266"));
+      Dio(BaseOptions(baseUrl: dotenv.env['API_URL']!));
 
   static final ApiServiceImpl _instance = ApiServiceImpl._internal();
 
@@ -71,27 +72,33 @@ class ApiServiceImpl implements ApiService {
     _dio.options.headers.remove("Authorization");
   }
 
+  // Méthodes ajustées pour gérer JSON, FormData, et fichiers
   @override
-  Future<Response> post(String s, {required Map<String, dynamic> data}) async {
-    var response = await _dio.post(s, data: data);
-    if (response.statusCode == 200) {
+  Future<Response> post(String path, {dynamic data}) async {
+    return _sendRequest(() => _dio.post(path, data: data));
+  }
+
+  @override
+  Future<Response> put(String path, {dynamic data}) async {
+    return _sendRequest(() => _dio.put(path, data: data));
+  }
+
+  @override
+  Future<Response> get(String path) async {
+    return _sendRequest(() => _dio.get(path));
+  }
+
+  @override
+  Future<Response> delete(String path) async {
+    return _sendRequest(() => _dio.delete(path));
+  }
+
+  Future<Response> _sendRequest(Future<Response> Function() requestMethod) async {
+    try {
+      var response = await requestMethod();
       return response;
+    } on DioException catch (error) {
+      return _handleError(error);
     }
-    return response;
   }
-
-  @override
-  Future<Response> get(String s) async {
-    var response = await _dio.get(s);
-    return response;
-  }
-
-  @override
-  Future<Response> put(String s, {required Map<String, dynamic> data}) async {
-    var response = await _dio.put(s, data: data);
-    return response;
-  }
-
-  @override
-  Future<Response> delete(String s) => _dio.delete(s);
 }

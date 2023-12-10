@@ -63,7 +63,7 @@ class HolidayChatViewModel extends ChangeNotifier {
       data: MessageData(
         clientId: const Uuid().v4(),
         text: messageContent,
-        localImages: _images.map((e) => e).toList()
+        localImages: _images.toList()
       ),
       from: user,
       status: MessageStatus.sending,

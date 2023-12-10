@@ -2,11 +2,13 @@ class Guest {
   final String? id;
   final String firstName;
   final String lastName;
+  final String profilePicture;
 
   Guest({
     this.id,
     required this.firstName,
     required this.lastName,
+    required this.profilePicture
   });
 
  factory Guest .fromJson(Map<String, dynamic> json) {
@@ -14,6 +16,7 @@ class Guest {
       id: json['id'],
       firstName: json['firstName'],
       lastName: json['lastName'],
+      profilePicture: json['profilePicture'],
     );
   }
 
@@ -22,6 +25,7 @@ class Guest {
       'id': id,
       'firstName': firstName,
       'lastName': lastName,
+      'profilePicture': profilePicture,
     };
   }
 
@@ -34,6 +38,7 @@ class Guest {
       id: id ?? this.id,
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
+      profilePicture: profilePicture,
     );
   }
 
