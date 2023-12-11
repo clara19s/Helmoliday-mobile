@@ -115,12 +115,31 @@ class HolidayDetailViewModel extends ChangeNotifier {
   }
 
   void goToEditActivity(String id) async {
-    await _context.push('/activities/edit/$id');
-    refreshActivities();
+    var holiday = await this.holiday;
+    if (holiday.published) {
+      _toastService.showMessage(ToastMessage(
+          type: ToastType.error,
+          text: 'Vous ne pouvez pas modifier une activité d\'une période de vacances publiée'));
+      return;
+    }
+    if (_context.mounted) {
+      await _context.push('/activities/edit/$id/${holiday.startDate}/${holiday.endDate}');
+      refreshActivities();
+    }
   }
 
   void goToCreateActivity() async {
-    await _context.push('/activities/add/$id');
+    var holiday = await this.holiday;
+    if (holiday.published) {
+      _toastService.showMessage(ToastMessage(
+          type: ToastType.error,
+          text: 'Vous ne pouvez pas ajouter une activité à une période de vacances publiée'));
+      return;
+    }
+    if (_context.mounted) {
+      await _context.push('/activities/add/$id/${holiday.startDate}/${holiday.endDate}');
+      refreshActivities();
+    }
     refreshActivities();
   }
 

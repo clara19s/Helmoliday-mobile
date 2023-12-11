@@ -6,10 +6,14 @@ class DateTimeRangePicker extends StatefulWidget {
     super.key,
     required this.onChanged,
     this.initialDateRange,
+    required this.minDate,
+    required this.maxDate,
   });
 
   final DateTimeRange? initialDateRange;
   final ValueChanged<DateTimeRange> onChanged;
+  final DateTime minDate;
+  final DateTime maxDate;
 
   @override
   State<DateTimeRangePicker> createState() => _DateTimeRangePickerState();
@@ -38,8 +42,8 @@ class _DateTimeRangePickerState extends State<DateTimeRangePicker> {
         DateTimeRange? dateRange = await showDateRangePicker(
           context: context,
           initialDateRange: widget.initialDateRange,
-          firstDate: DateTime.now(),
-          lastDate: DateTime.now().add(const Duration(days: 365 * 10)),
+          firstDate: widget.minDate,
+          lastDate: widget.maxDate,
         );
 
         if (context.mounted && dateRange != null) {

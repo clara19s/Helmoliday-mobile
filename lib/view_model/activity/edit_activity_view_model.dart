@@ -8,7 +8,8 @@ import '../../model/activity.dart';
 
 class EditActivityViewModel extends ChangeNotifier {
   late final ActivityRepository _activityRepository;
-  final String id;
+  final String activityId;
+  final DateTimeRange holidayDateRange;
   late BuildContext _context;
 
   //todo: add activity view model
@@ -17,14 +18,9 @@ class EditActivityViewModel extends ChangeNotifier {
 
   bool get isLoading => _isLoading;
 
-  EditActivityViewModel(BuildContext context, this.id) {
+  EditActivityViewModel(BuildContext context, this.activityId, this.holidayDateRange) {
     _context = context;
     _activityRepository = context.read<ActivityRepository>();
-  }
-
-  Future<List<Activity>> getActivity(String id) async {
-    var response = await _activityRepository.getActivities(id);
-    return response;
   }
 
   Future<Activity> getDetailActivity(String id) async {
@@ -41,9 +37,9 @@ class EditActivityViewModel extends ChangeNotifier {
     _isLoading = true;
     try {
       await _activityRepository.updateActivity(
-          id,
+          activityId,
           Activity(
-              id: id,
+              id: activityId,
               name: name,
               description: description,
               startDate: dateTimeRange.start,

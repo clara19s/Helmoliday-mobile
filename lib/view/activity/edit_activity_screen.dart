@@ -6,9 +6,10 @@ import '../../view_model/activity/edit_activity_view_model.dart';
 import '../../widget/activity/activity_form.dart';
 
 class EditActivityScreen extends StatefulWidget {
-  const EditActivityScreen({super.key, required this.id});
+  const EditActivityScreen({super.key, required this.id, required this.holidayDateRange});
 
   final String id;
+  final DateTimeRange holidayDateRange;
 
   @override
   State<EditActivityScreen> createState() => _EditActivityScreenState();
@@ -18,7 +19,7 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => EditActivityViewModel(context, widget.id),
+      create: (context) => EditActivityViewModel(context, widget.id, widget.holidayDateRange),
       child: Consumer<EditActivityViewModel>(
         builder: (context, model, child) => Scaffold(
           appBar: AppBar(
@@ -37,6 +38,8 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
                         dateTimeRange: DateTimeRange(
                             start: snapshot.data!.startDate,
                             end: snapshot.data!.endDate),
+                        minDate: widget.holidayDateRange.start,
+                        maxDate: widget.holidayDateRange.end,
                         address: snapshot.data!.address,
                         category: snapshot.data!.category.name,
                         onSave: (editedActivity) {

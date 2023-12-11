@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/activity.dart';
@@ -9,7 +8,8 @@ import '../../repository/activity_repository.dart';
 class AddActivityViewModel extends ChangeNotifier {
   late final ActivityRepository _activityRepository;
 
-  final String id;
+  final String holidayId;
+  final DateTimeRange holidayDateRange;
 
   bool _isLoading = false;
 
@@ -20,7 +20,7 @@ class AddActivityViewModel extends ChangeNotifier {
 
   String? get errorMessage => _errorMessage;
 
-  AddActivityViewModel(BuildContext context, this.id) {
+  AddActivityViewModel(BuildContext context, this.holidayId, this.holidayDateRange) {
     _context = context;
     _activityRepository = context.read<ActivityRepository>();
   }
@@ -35,9 +35,9 @@ class AddActivityViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       await _activityRepository.createActivity(
-          id,
+          holidayId,
           Activity(
-              id: id,
+              id: holidayId,
               name: name,
               description: description,
               startDate: dateTimeRange.start,

@@ -101,6 +101,8 @@ class _HolidayFormState extends State<HolidayForm> {
         const SizedBox(height: 8),
         DateTimeRangePicker(
           initialDateRange: widget.dateTimeRange,
+          minDate: DateTime.now(),
+          maxDate: DateTime.now().add(const Duration(days: 365 * 10)),
           onChanged: (DateTimeRange value) {},
         ),
         const SizedBox(height: 16),

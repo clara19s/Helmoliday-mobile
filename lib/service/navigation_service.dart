@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:helmoliday/view/activity/edit_activity_screen.dart';
 import 'package:helmoliday/view/holiday/edit_holiday_screen.dart';
@@ -74,13 +75,32 @@ class NavigationService {
             ),
           ]),
       GoRoute(
-          path: '/activities/edit/:id',
-          builder: (context, state) =>
-              EditActivityScreen(id: state.pathParameters['id']!)),
+          path: '/activities/edit/:id/:start/:end',
+          builder: (context, state) {
+            var startDate = state.pathParameters['start'];
+            var endDate = state.pathParameters['end'];
+
+            return EditActivityScreen(
+              id: state.pathParameters['id']!,
+              holidayDateRange: DateTimeRange(
+                  start: DateTime.parse(startDate!),
+                  end: DateTime.parse(endDate!)),
+            );
+          }),
       GoRoute(
-          path: '/activities/add/:id',
-          builder: (context, state) =>
-              AddActivityScreen(id: state.pathParameters['id']!)),
+        path: '/activities/add/:id/:start/:end',
+        builder: (context, state) {
+          var startDate = state.pathParameters['start'];
+          var endDate = state.pathParameters['end'];
+
+          return AddActivityScreen(
+            id: state.pathParameters['id']!,
+            holidayDateRange: DateTimeRange(
+                start: DateTime.parse(startDate!),
+                end: DateTime.parse(endDate!)),
+          );
+        },
+      ),
       GoRoute(
         path: '/activities/map/:id',
         builder: (context, state) =>

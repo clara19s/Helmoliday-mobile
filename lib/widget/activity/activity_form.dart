@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../model/address.dart';
@@ -12,6 +11,8 @@ class ActivityForm extends StatefulWidget {
     this.name,
     this.description,
     this.dateTimeRange,
+    required this.minDate,
+    required this.maxDate,
     this.address,
     this.category,
   });
@@ -19,11 +20,11 @@ class ActivityForm extends StatefulWidget {
   final String? name;
   final String? description;
   final DateTimeRange? dateTimeRange;
+  final DateTime minDate;
+  final DateTime maxDate;
   final Address? address;
   final String? category;
   final Function(Map<String, dynamic>) onSave;
-
-
 
   @override
   State<ActivityForm> createState() => _activityFormState();
@@ -39,6 +40,7 @@ class _activityFormState extends State<ActivityForm> {
   final TextEditingController cityController = TextEditingController();
   final TextEditingController countryController = TextEditingController();
   final TextEditingController categoryController = TextEditingController();
+  DateTimeRange? dateTimeRange;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -68,119 +70,123 @@ class _activityFormState extends State<ActivityForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _formKey,
-      child:
-     Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const Text(
-          'Nom',
-          style: TextStyle(fontSize: 16),
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Veuillez entrer un nom';
-            }
-            return null;
-          },
-          controller: nameController,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Nom de l\'activité',
-          ),
-        ),
-        const SizedBox(height: 16),
-        TextFormField(
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Veuillez entrer une description';
-            }
-            return null;
-          },
-          controller: descriptionController,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Description de l\'activité',
-          ),
-        ),
-        const SizedBox(height: 16),
-        DropdownButtonFormField(
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Catégorie de l\'activité',
-          ),
-          value: categoryController.text,
-          items: const [
-            DropdownMenuItem(
-              value: 'sport',
-              child: Text('Sport'),
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text(
+              'Nom',
+              style: TextStyle(fontSize: 16),
             ),
-            DropdownMenuItem(
-              value: 'cultural',
-              child: Text('Culture'),
-            ),
-            DropdownMenuItem(
-              value: 'entertainment',
-              child: Text('Divertissement'),
-            ),
-            DropdownMenuItem(
-              value: 'gastronomic',
-              child: Text('Gastronomique'),
-            ),
-            DropdownMenuItem(
-              value: 'other',
-              child: Text('Autre'),
-            ),
-          ],
-          onChanged: (value) {
-            categoryController.text = value.toString();
-          },
-        ),
-        const SizedBox(height: 16),
-        DateTimeRangePicker(
-            initialDateRange: widget.dateTimeRange,
-            onChanged: (dateTimeRange) {}),
-        const SizedBox(height: 16),
-        AddressFormPart(
-          streetController: streetController,
-          streetNumberController: streetNumberController,
-          postalCodeController: postalCodeController,
-          cityController: cityController,
-          countryController: countryController,
-        ),
-        const SizedBox(height: 16),
-        isLoading
-            ? const CircularProgressIndicator()
-            : ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    isLoading = true;
-                    await widget.onSave({
-                      "name": nameController.text,
-                      "description": descriptionController.text,
-                      "dateTimeRange": DateTimeRange(
-                        start: DateTime.now(),
-                        end: DateTime.now(),
-                      ),
-                      "address": Address(
-                        street: streetController.text,
-                        streetNumber: streetNumberController.text,
-                        postalCode: postalCodeController.text,
-                        city: cityController.text,
-                        country: countryController.text,
-                      ),
-                      "category": categoryController.text,
-                    });
-                    isLoading = false;
-                  }
-                },
-                child: const Text('Enregistrer'),
+            const SizedBox(height: 8),
+            TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Veuillez entrer un nom';
+                }
+                return null;
+              },
+              controller: nameController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Nom de l\'activité',
               ),
-      ],
-    )
-    );
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Veuillez entrer une description';
+                }
+                return null;
+              },
+              controller: descriptionController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Description de l\'activité',
+              ),
+            ),
+            const SizedBox(height: 16),
+            DropdownButtonFormField(
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Catégorie de l\'activité',
+              ),
+              value: categoryController.text,
+              items: const [
+                DropdownMenuItem(
+                  value: 'sport',
+                  child: Text('Sport'),
+                ),
+                DropdownMenuItem(
+                  value: 'cultural',
+                  child: Text('Culture'),
+                ),
+                DropdownMenuItem(
+                  value: 'entertainment',
+                  child: Text('Divertissement'),
+                ),
+                DropdownMenuItem(
+                  value: 'gastronomic',
+                  child: Text('Gastronomique'),
+                ),
+                DropdownMenuItem(
+                  value: 'other',
+                  child: Text('Autre'),
+                ),
+              ],
+              onChanged: (value) {
+                categoryController.text = value.toString();
+              },
+            ),
+            const SizedBox(height: 16),
+            DateTimeRangePicker(
+                initialDateRange: widget.dateTimeRange,
+                minDate: widget.minDate,
+                maxDate: widget.maxDate,
+                onChanged: (dateTimeRange) {
+                  setState(() {
+                    this.dateTimeRange = dateTimeRange;
+                  });
+                }),
+            const SizedBox(height: 16),
+            AddressFormPart(
+              streetController: streetController,
+              streetNumberController: streetNumberController,
+              postalCodeController: postalCodeController,
+              cityController: cityController,
+              countryController: countryController,
+            ),
+            const SizedBox(height: 16),
+            isLoading
+                ? const CircularProgressIndicator()
+                : ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        isLoading = true;
+                        await widget.onSave({
+                          "name": nameController.text,
+                          "description": descriptionController.text,
+                          "dateTimeRange": DateTimeRange(
+                            start: dateTimeRange!.start,
+                            end: dateTimeRange!.end,
+                          ),
+                          "address": Address(
+                            street: streetController.text,
+                            streetNumber: streetNumberController.text,
+                            postalCode: postalCodeController.text,
+                            city: cityController.text,
+                            country: countryController.text,
+                          ),
+                          "category": categoryController.text,
+                        });
+                        isLoading = false;
+                      }
+                    },
+                    child: const Text('Enregistrer'),
+                  ),
+          ],
+        ));
   }
 }
