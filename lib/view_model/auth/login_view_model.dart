@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:helmoliday/service/api_service.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
@@ -38,7 +39,7 @@ class LoginViewModel extends ChangeNotifier {
         _context.go('/home');
       }
     } catch (e) {
-      _errorMessage = 'Erreur lors de la connexion. Veuillez réessayer.';
+      _errorMessage = e.toString();
       _logger.severe('Erreur lors de la connexion', e);
     } finally {
       _isLoading = false;

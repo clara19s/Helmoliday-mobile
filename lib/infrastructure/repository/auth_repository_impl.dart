@@ -28,6 +28,10 @@ class AuthRepositoryImpl implements AuthRepository {
         "password": password,
       });
 
+      if (response.statusCode != 200) {
+        throw Exception(response.data["message"]);
+      }
+
       var token = response.data["token"];
       _apiService.setAuthorizationHeader(token);
       _secureStorage.write(key: "jwt_token", value: token);
@@ -36,9 +40,7 @@ class AuthRepositoryImpl implements AuthRepository {
       return User.fromJson(response.data);
     } catch (e) {
       rethrow;
-
     }
-    return null;
   }
 
   @override

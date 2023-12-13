@@ -29,36 +29,28 @@ class ApiServiceImpl implements ApiService {
 
   Response _handleError(DioException error) {
     String errorMessage = "Une erreur est survenue";
-    int? errorCode;
+    int? errorCode = error.response?.statusCode;
 
     print(error.response?.data);
 
-    switch (error.type) {
-      case DioExceptionType.connectionTimeout:
-      case DioExceptionType.sendTimeout:
-      case DioExceptionType.receiveTimeout:
-        errorMessage = "Temps d'attente dépassé";
-        break;
-      case DioExceptionType.badResponse:
-        errorMessage = "Échec lors de l'appel à l'API";
-        errorCode = error.response?.statusCode;
-        break;
-      case DioExceptionType.badCertificate:
-        errorMessage = "Certificat invalide";
-        break;
-      case DioExceptionType.connectionError:
-      case DioExceptionType.cancel:
-        errorMessage = "Erreur de connexion";
-        break;
-      case DioExceptionType.unknown:
-        errorMessage = "Une erreur inattendue s'est produite";
-        break;
+    try {
+      if (error.response?.data is Map<String, dynamic>) {
+        var responseData = error.response?.data as Map<String, dynamic>;
+        if (responseData.containsKey('detail')) {
+          errorMessage = responseData['detail'];
+        }
+      }
+    } catch (e) {
+      print("Erreur lors de l'analyse du message d'erreur : $e");
     }
 
     return Response(
       requestOptions: error.requestOptions,
+      data: {
+        "message": errorMessage,
+        "statusCode": errorCode,
+      },
       statusCode: errorCode,
-      data: ApiError(message: errorMessage, statusCode: errorCode),
     );
   }
 

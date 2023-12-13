@@ -16,6 +16,7 @@ class HomeScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text('HELMoliday'),
         ),
+        key: const Key('home_screen'),
         body: Consumer<HomeScreenViewModel>(
           builder: (context, viewModel, child) {
             return RefreshIndicator(
