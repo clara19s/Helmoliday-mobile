@@ -37,11 +37,11 @@ class HolidayChatViewModel extends ChangeNotifier {
 
   Future<void> init() async {
     currentUserId = (await _authRepository.getCurrentUser())?.id;
+    _messagingService.getMessagesStream().listen(onNewMessage);
     await _messagingService.connect({
       'authEndpoint': '/holidays/$holidayId/chat/auth',
       'channelName': 'presence-$holidayId'
     });
-    _messagingService.getMessagesStream().listen(onNewMessage);
     isLoading = false;
     notifyListeners();
     return Future.value();

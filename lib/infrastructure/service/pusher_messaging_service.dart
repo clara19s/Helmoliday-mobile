@@ -23,7 +23,9 @@ class PusherMessagingService implements IMessagingService {
 
   @override
   Future<void> connect(Map<String, dynamic> connectionOptions) async {
-    if (_apiKey == null || _cluster == null) throw Exception("Pusher API key or cluster is not set");
+    if (_apiKey == null || _cluster == null) {
+      throw Exception("Pusher API key or cluster is not set");
+    }
     await pusher.init(
         apiKey: _apiKey!,
         cluster: _cluster!,
@@ -61,11 +63,21 @@ class PusherMessagingService implements IMessagingService {
         }
       },
     );
+    await _apiService
+        .get(
+        '/holidays/${connectionOptions["channelName"].replaceFirst("presence-", "")}/chat/messages')
+        .then((response) {
+      final messages = response.data as List<dynamic>;
+      for (var message in messages) {
+        _messageStreamController.add(Message.fromJson(message));
+      }
+    });
   }
 
   @override
   Future<void> disconnect() async {
-    if (_channelName != null) await pusher.unsubscribe(channelName: _channelName!);
+    if (_channelName != null)
+      await pusher.unsubscribe(channelName: _channelName!);
     pusher.disconnect();
     return Future.value();
   }
