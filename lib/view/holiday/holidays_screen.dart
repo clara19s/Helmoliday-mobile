@@ -101,6 +101,7 @@ class HolidayScreen extends StatelessWidget {
                   onPressed: () async {
                     viewModel.goToCreateHoliday();
                   },
+                  key: const Key('addHolidayButton'),
                   child: const Icon(Icons.add),
                 ),
               )),

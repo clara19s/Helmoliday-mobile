@@ -30,6 +30,7 @@ class AddressFormPart extends StatelessWidget {
         const SizedBox(height: 8),
         TextFormField(
             controller: streetController,
+            key: const Key("street"),
             decoration: const InputDecoration(
               labelText: "Rue",
               hintText: "Rue de Harlez",
@@ -43,6 +44,7 @@ class AddressFormPart extends StatelessWidget {
         const SizedBox(height: 8),
         TextFormField(
             controller: streetNumberController,
+            key: const Key("streetNumber"),
             decoration: const InputDecoration(
               labelText: "Numéro de rue",
               hintText: "25",
@@ -56,6 +58,7 @@ class AddressFormPart extends StatelessWidget {
         const SizedBox(height: 8),
         TextFormField(
             controller: postalCodeController,
+            key: const Key("postalCode"),
             decoration: const InputDecoration(
               labelText: "Code postal",
               hintText: "4000",
@@ -69,6 +72,7 @@ class AddressFormPart extends StatelessWidget {
         const SizedBox(height: 8),
         TextFormField(
             controller: cityController,
+            key: const Key("city"),
             decoration: const InputDecoration(
               labelText: "Ville",
               hintText: "Liège",
@@ -82,6 +86,7 @@ class AddressFormPart extends StatelessWidget {
         const SizedBox(height: 8),
         TextFormField(
             controller: countryController,
+            key: const Key("country"),
             decoration: const InputDecoration(
               labelText: "Pays",
               hintText: "Belgique",

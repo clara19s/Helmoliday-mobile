@@ -7,9 +7,7 @@ import '../../model/activity.dart';
 
 class ActivityListScreen extends StatefulWidget {
   const ActivityListScreen(
-      {super.key,
-      required this.id,
-      required this.activities});
+      {super.key, required this.id, required this.activities});
 
   final String id;
   final List<Activity> activities;
@@ -59,25 +57,33 @@ class _ActivityListScreen extends State<ActivityListScreen> {
                       ),
                     ],
                   ),
-                  trailing: PopupMenuButton(
-                    itemBuilder: (context) => [
-                      const PopupMenuItem(
-                        value: 'edit',
-                        child: Text('Modifier'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'delete',
-                        child: Text('Supprimer'),
-                      ),
-                    ],
-                    onSelected: (value) {
-                      if (value == 'edit') {
-                        viewModel.goToEditActivity(activity.id);
-                      } else if (value == 'delete') {
-                        viewModel.deleteActivity(activity.id);
-                      }
-                    },
-                  ),
+                  trailing: Wrap(children: [
+                    IconButton(
+                      icon: const Icon(Icons.directions),
+                      onPressed: () {
+                        viewModel.goToActivityMap(activity.id);
+                      },
+                    ),
+                    PopupMenuButton(
+                      itemBuilder: (context) => [
+                        const PopupMenuItem(
+                          value: 'edit',
+                          child: Text('Modifier'),
+                        ),
+                        const PopupMenuItem(
+                          value: 'delete',
+                          child: Text('Supprimer'),
+                        ),
+                      ],
+                      onSelected: (value) {
+                        if (value == 'edit') {
+                          viewModel.goToEditActivity(activity.id);
+                        } else if (value == 'delete') {
+                          viewModel.deleteActivity(activity.id);
+                        }
+                      },
+                    ),
+                  ]),
                 ),
               );
             }));

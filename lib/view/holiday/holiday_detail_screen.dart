@@ -27,25 +27,29 @@ class HolidayDetailScreen extends StatelessWidget {
             title: const Text('Détails'),
             actions: [
               IconButton(
+                key: const Key("editHolidayButton"),
                 onPressed: () {
                   viewModel.goToEditHoliday();
                 },
                 icon: const Icon(Icons.edit),
               ),
               IconButton(
+                key: const Key("deleteHolidayButton"),
                 onPressed: () {
                   Widget cancelButton = TextButton(
+                    key: const Key("cancelDeleteButton"),
                     child: const Text("Annuler"),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
                   );
                   Widget continueButton = TextButton(
-                    child: const Text("Supprimer"),
+                    key: const Key("confirmDeleteButton"),
                     onPressed: () {
                       viewModel.removeHoliday();
                       Navigator.of(context).pop();
                     },
+                    child: const Text("Supprimer"),
                   );
 
                   AlertDialog alert = AlertDialog(
