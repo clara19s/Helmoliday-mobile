@@ -56,104 +56,104 @@ class _HolidayFormState extends State<HolidayForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form (
-      key: _formKey,
-      child:
-    Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-
-        const Text(
-          "Informations générales",
-          style: TextStyle(fontSize: 24),
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return "Veuillez entrer un nom";
-            }
-            return null;
-          },
-          controller: nameController,
-          decoration: const InputDecoration(
-            labelText: "Nom de la période",
-            hintText: "Balade à Liège",
-          ),
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return "Veuillez entrer une description";
-            }
-            return null;
-          },
-          controller: descriptionController,
-          maxLines: 5,
-          decoration: const InputDecoration(
-            labelText: "Description",
-            hintText: "Une balade dans la ville de Liège...",
-            alignLabelWithHint: true,
-          ),
-        ),
-        const SizedBox(height: 8),
-        DateTimeRangePicker(
-          initialDateRange: widget.dateTimeRange,
-          minDate: DateTime.now(),
-          maxDate: DateTime.now().add(const Duration(days: 365 * 10)),
-          onChanged: (DateTimeRange value) {},
-        ),
-        const SizedBox(height: 16),
-        AddressFormPart(
-          streetController: streetController,
-          streetNumberController: streetNumberController,
-          postalCodeController: postalCodeController,
-          cityController: cityController,
-          countryController: countryController,
-        ),
-        const SizedBox(height: 16),
-        isLoading
-            ? const CircularProgressIndicator()
-        :Column(
-          children : [
-
-             ElevatedButton(
-                onPressed: () async {
-    if (_formKey.currentState!.validate()) {
-      isLoading = true;
-      await widget.onSave({
-        "name": nameController.text,
-        "description": descriptionController.text,
-        "dateTimeRange": DateTimeRange(
-          start: DateTime.now(),
-          end: DateTime.now(),
-        ),
-        "address": Address(
-          street: streetController.text,
-          streetNumber: streetNumberController.text,
-          postalCode: postalCodeController.text,
-          city: cityController.text,
-          country: countryController.text,
-        ),
-      });
-      isLoading = false;
-    }
-                },
-                child: const Text(
-                  "Enregistrer",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    fontStyle: FontStyle.normal,
-                  ),
-                ),
+    return Form(
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text(
+              "Informations générales",
+              style: TextStyle(fontSize: 24),
+            ),
+            const SizedBox(height: 8),
+            TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Veuillez entrer un nom";
+                }
+                return null;
+              },
+              controller: nameController,
+              key: const Key("name"),
+              decoration: const InputDecoration(
+                labelText: "Nom de la période",
+                hintText: "Balade à Liège",
               ),
-      ],
-    ),
-      ],
-    )
-    );
+            ),
+            const SizedBox(height: 8),
+            TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Veuillez entrer une description";
+                }
+                return null;
+              },
+              controller: descriptionController,
+              key: const Key("description"),
+              maxLines: 5,
+              decoration: const InputDecoration(
+                labelText: "Description",
+                hintText: "Une balade dans la ville de Liège...",
+                alignLabelWithHint: true,
+              ),
+            ),
+            const SizedBox(height: 8),
+            DateTimeRangePicker(
+              initialDateRange: widget.dateTimeRange,
+              minDate: DateTime.now(),
+              maxDate: DateTime.now().add(const Duration(days: 365 * 10)),
+              onChanged: (DateTimeRange value) {},
+              key: const Key("dateTimeRange"),
+            ),
+            const SizedBox(height: 16),
+            AddressFormPart(
+              streetController: streetController,
+              streetNumberController: streetNumberController,
+              postalCodeController: postalCodeController,
+              cityController: cityController,
+              countryController: countryController,
+            ),
+            const SizedBox(height: 16),
+            isLoading
+                ? const CircularProgressIndicator()
+                : Column(
+                    children: [
+                      ElevatedButton(
+                        key: const Key("submitButton"),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            isLoading = true;
+                            await widget.onSave({
+                              "name": nameController.text,
+                              "description": descriptionController.text,
+                              "dateTimeRange": DateTimeRange(
+                                start: DateTime.now(),
+                                end: DateTime.now(),
+                              ),
+                              "address": Address(
+                                street: streetController.text,
+                                streetNumber: streetNumberController.text,
+                                postalCode: postalCodeController.text,
+                                city: cityController.text,
+                                country: countryController.text,
+                              ),
+                            });
+                            isLoading = false;
+                          }
+                        },
+                        child: const Text(
+                          "Enregistrer",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            fontStyle: FontStyle.normal,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+          ],
+        ));
   }
 }
