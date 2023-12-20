@@ -76,8 +76,9 @@ class PusherMessagingService implements IMessagingService {
 
   @override
   Future<void> disconnect() async {
-    if (_channelName != null)
+    if (_channelName != null) {
       await pusher.unsubscribe(channelName: _channelName!);
+    }
     pusher.disconnect();
     return Future.value();
   }

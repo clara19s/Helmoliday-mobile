@@ -1,17 +1,13 @@
 import 'dart:convert';
 
-import 'package:helmoliday/model/activity.dart';
 import 'package:helmoliday/model/holiday.dart';
 import 'package:open_file/open_file.dart';
 
-import '../../model/user.dart';
 import '../../model/weather.dart';
 import '../../repository/holiday_repository.dart';
 import '../../service/api_service.dart';
 
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
 
@@ -82,6 +78,7 @@ class HolidayRepositoryImpl implements HolidayRepository {
     var response = await _apiService.get("/holidays/$id/weather");
     return Weather.fromJson(response.data);
   }
+  @override
   Future<void> downloadICSFile(String id) async {
     try {
       var response = await _apiService.get("/holidays/$id/calendar");

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:helmoliday/model/holiday.dart';
 import 'package:helmoliday/repository/holiday_repository.dart';
 import 'package:provider/provider.dart';
 

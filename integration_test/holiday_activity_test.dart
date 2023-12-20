@@ -113,12 +113,10 @@ void main() {
     await tester.tap(find.byKey(const Key("submitButton")).first);
 
     // Attendre que les informations soient mises à jour
-    await tester.pumpAndSettle();
-    await tester.pump(const Duration(seconds: 4));
-    await tester.pumpAndSettle();
+    await Future.delayed(const Duration(seconds: 5));
 
     // Vérifier que la période de vacances a bien été modifiée
-    //expect(find.text("Balade à Bruxelles").first, findsOneWidget);
+    expect(find.text("Balade à Bruxelles"), findsOneWidget);
 
     // Cliquer sur le bouton de suppression
     await tester.tap(find.byKey(const Key("deleteHolidayButton")));
@@ -133,6 +131,6 @@ void main() {
     await tester.pump(const Duration(seconds: 5));
 
     // Vérifier que la période de vacances a bien été supprimée
-    expect(find.text("Balade à Bruxelles").first, findsNothing);
+    expect(find.text("Balade à Bruxelles"), findsNothing);
   });
 }
