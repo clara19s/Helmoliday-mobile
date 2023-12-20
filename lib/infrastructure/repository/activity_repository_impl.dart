@@ -37,6 +37,7 @@ class ActivityRepositoryImp implements ActivityRepository {
     print(response.data);
   }
 
+  @override
   Future<Activity> getDetailActivity(String id) async {
     var response = await _apiService.get("/activities/$id");
     return Activity.fromJson(response.data);

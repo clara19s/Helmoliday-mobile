@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 class Weather {
   late final String wheather;

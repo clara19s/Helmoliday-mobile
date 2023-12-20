@@ -1,8 +1,5 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
-import 'package:helmoliday/view/holiday/holiday_detail_screen.dart';
-import 'package:helmoliday/view_model/holiday/holiday_detail_view_model.dart';
-import 'package:provider/provider.dart';
 
 import '../../model/guest.dart';
 
@@ -36,9 +33,7 @@ class _GuestHolidayScreen extends State<GuestHolidayScreen> {
               backgroundImage:
                   NetworkImage(widget.guests[index].profilePicture),
             ),
-            title: Text(widget.guests[index].firstName +
-                ' ' +
-                widget.guests[index].lastName),
+            title: Text('${widget.guests[index].firstName} ${widget.guests[index].lastName}'),
           );
         },
       ),

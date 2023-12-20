@@ -4,7 +4,6 @@ import 'package:helmoliday/theme.dart';
 import 'package:helmoliday/view_model/auth/register_view_model.dart';
 import 'package:provider/provider.dart';
 
-import '../../view_model/auth/login_view_model.dart';
 import '../../widget/common/password_field.dart';
 
 class RegisterScreen extends StatefulWidget {
