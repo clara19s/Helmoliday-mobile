@@ -19,4 +19,6 @@ abstract class AuthRepository {
     required String firstName,
     required String lastName,
   });
+
+  Future<bool> deleteUser();
 }

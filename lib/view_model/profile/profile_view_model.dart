@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:helmoliday/service/toast_service.dart';
 import 'package:provider/provider.dart';
 
 import '../../repository/auth_repository.dart';
@@ -21,6 +22,7 @@ class ProfileViewModel extends ChangeNotifier {
 
   bool get isLoading => _isLoading;
 
+  late final IToastService _toastService;
   late final AuthRepository _authRepository;
   late final BuildContext _context;
 
@@ -30,6 +32,7 @@ class ProfileViewModel extends ChangeNotifier {
   ProfileViewModel(BuildContext context) {
     _context = context;
     _authRepository = context.read<AuthRepository>();
+    _toastService = context.read<IToastService>();
     _isLoading = true;
     init();
   }
@@ -69,6 +72,19 @@ class ProfileViewModel extends ChangeNotifier {
 
   Future<void> logOut() async {
     await _authRepository.logOut();
+    if (_context.mounted) {
+      _context.go('/login');
+    }
+  }
+
+  Future<void> deleteUser() async {
+    await _authRepository.deleteUser();
+    _toastService.showMessage(
+      ToastMessage(
+        text: 'Votre compte a été supprimé',
+        type: ToastType.success,
+      ),
+    );
     if (_context.mounted) {
       _context.go('/login');
     }

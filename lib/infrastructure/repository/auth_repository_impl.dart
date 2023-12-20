@@ -64,16 +64,14 @@ class AuthRepositoryImpl implements AuthRepository {
 
       return User.fromJson(response.data);
     } catch (e) {
-      print(e);
+      rethrow;
     }
-    return null;
   }
 
   @override
   Future<void> logOut() async {
     try {
-      _apiService.removeAuthorizationHeader();
-      await _secureStorage.delete(key: "jwt_token");
+      await removeCredentials();
     } catch (e) {
       print(e);
     }
@@ -109,5 +107,21 @@ class AuthRepositoryImpl implements AuthRepository {
       print(e);
     }
     return false;
+  }
+
+  @override
+  Future<bool> deleteUser() async {
+    var response = await _apiService.delete("/account");
+    if (response.statusCode == 204) {
+      await removeCredentials();
+      return Future.value(true);
+    }
+    return Future.value(false);
+  }
+
+  Future<void> removeCredentials() async {
+    _user = null;
+    _apiService.removeAuthorizationHeader();
+    await _secureStorage.delete(key: "jwt_token");
   }
 }
