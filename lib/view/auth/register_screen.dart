@@ -66,6 +66,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
                         child: TextFormField(
                           controller: _firstNameController,
+                          key: const Key("firstName"),
                           decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.badge),
                             labelText: "Prénom",
@@ -83,6 +84,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                         child: TextFormField(
                           controller: _lastNameController,
+                          key: const Key("name"),
                           decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.badge),
                             labelText: "Nom",
@@ -100,6 +102,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                         child: TextFormField(
                           controller: _emailController,
+                          key: const Key("Adresse e-mail"),
                           decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.mail),
                             labelText: "Adresse e-mail",
@@ -119,6 +122,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       PasswordField(
                         controller: _passwordController,
+                        key: const Key("mot de passe"),
                         onChanged: (value) {},
                       ),
                       Padding(
