@@ -120,7 +120,7 @@ class HolidayDetailScreen extends StatelessWidget {
                             child: const Text("Confirmer"),
                             onPressed: () async {
                               await viewModel.addParticipant(_controller.text);
-                              _controller.clear();
+
                               if (context.mounted) {
                                 Navigator.of(context).pop();
                               }
