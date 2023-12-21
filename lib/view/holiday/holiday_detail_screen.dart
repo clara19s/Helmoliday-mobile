@@ -140,6 +140,7 @@ class HolidayDetailScreen extends StatelessWidget {
                               continueButton,
                             ],
                           );
+                          _controller.clear();
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
