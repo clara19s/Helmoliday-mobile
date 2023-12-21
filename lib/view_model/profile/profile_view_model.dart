@@ -63,6 +63,14 @@ class ProfileViewModel extends ChangeNotifier {
         email: email,
       );
       result = changeResult;
+      if (result) {
+        _toastService.showMessage(
+          ToastMessage(
+            text: 'Votre profil a été mis à jour',
+            type: ToastType.success,
+          ),
+        );
+      }
     } catch (e) {
       _errorMessage = 'Erreur lors de la mise à jour du profil';
       print(e);
