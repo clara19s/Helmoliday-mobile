@@ -33,6 +33,7 @@ class _HolidayFormState extends State<HolidayForm> {
   final TextEditingController postalCodeController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
   final TextEditingController countryController = TextEditingController();
+  DateTimeRange? dateTimeRange;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -51,6 +52,9 @@ class _HolidayFormState extends State<HolidayForm> {
       postalCodeController.text = widget.address!.postalCode;
       cityController.text = widget.address!.city;
       countryController.text = widget.address!.country;
+    }
+    if (widget.dateTimeRange != null) {
+      dateTimeRange = widget.dateTimeRange;
     }
   }
 
@@ -101,9 +105,13 @@ class _HolidayFormState extends State<HolidayForm> {
             const SizedBox(height: 8),
             DateTimeRangePicker(
               initialDateRange: widget.dateTimeRange,
-              minDate: DateTime.now(),
+              minDate: DateTime.now().subtract(const Duration(days: 365 * 10)),
               maxDate: DateTime.now().add(const Duration(days: 365 * 10)),
-              onChanged: (DateTimeRange value) {},
+              onChanged: (dateTimeRange) {
+                setState(() {
+                  this.dateTimeRange = dateTimeRange;
+                });
+              },
               key: const Key("dateTimeRange"),
             ),
             const SizedBox(height: 16),
@@ -128,8 +136,8 @@ class _HolidayFormState extends State<HolidayForm> {
                               "name": nameController.text,
                               "description": descriptionController.text,
                               "dateTimeRange": DateTimeRange(
-                                start: DateTime.now(),
-                                end: DateTime.now(),
+                                start: dateTimeRange!.start,
+                                end: dateTimeRange!.end,
                               ),
                               "address": Address(
                                 street: streetController.text,
