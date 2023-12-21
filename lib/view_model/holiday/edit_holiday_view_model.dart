@@ -37,7 +37,7 @@ class EditHolidayViewModel extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
     try {
-      _holidaysRepository.updateHoliday(id, Holiday(
+      await _holidaysRepository.updateHoliday(id, Holiday(
         name: name,
         description: description,
         startDate: dateTimeRange.start,
