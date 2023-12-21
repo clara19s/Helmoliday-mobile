@@ -110,7 +110,6 @@ class HolidayDetailScreen extends StatelessWidget {
                         } else if (value == "exporter") {
                           viewModel.downloadICSFile(id);
                         } else if (value == "ajouterParticipant") {
-                          // TODO : ajouter vérification si l'utilisateur existe
                           Widget cancelButton = TextButton(
                             child: const Text("Annuler"),
                             onPressed: () {
@@ -119,9 +118,12 @@ class HolidayDetailScreen extends StatelessWidget {
                           );
                           Widget continueButton = TextButton(
                             child: const Text("Confirmer"),
-                            onPressed: () {
-                              viewModel.addParticipant(_controller.text);
-                              Navigator.of(context).pop();
+                            onPressed: () async {
+                              await viewModel.addParticipant(_controller.text);
+                              _controller.clear();
+                              if (context.mounted) {
+                                Navigator.of(context).pop();
+                              }
                             },
                           );
                           AlertDialog alert = AlertDialog(

@@ -70,9 +70,11 @@ class HolidayDetailViewModel extends ChangeNotifier {
     refreshData();
   }
 
-  void exitHoliday() {
-    _holidayRepository.exitHoliday(id);
-    _context.pop();
+  void exitHoliday() async {
+    await _holidayRepository.exitHoliday(id);
+    if (_context.mounted) {
+      _context.pop();
+    }
   }
 
   void publishHoliday() async {
