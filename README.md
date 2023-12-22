@@ -1,16 +1,25 @@
-# helmoliday
+# HELMoliday Web
 
-Une application de planification de voyages
+Projet du cours d'architectures logicielles et du cours de frameworks web (année académique 2023-2024) réalisé par Clara SCHILTZ et Lionel BOVY.
 
-## Getting Started
+Lien vers le projet en production : [https://panoramix.cg.helmo.be/~q210266](https://panoramix.cg.helmo.be/~q210266)
 
-This project is a starting point for a Flutter application.
+**⚠️ Activer la connexion VPN de HELMo**
 
-A few resources to get you started if this is your first Flutter project:
+## Installation
+- Depuis le terminal, ouvrir le dossier racine du projet
+- Exécuter la commande `npm install`
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Utilisateurs
+| Adresse e-mail         | Mot de passe |
+|------------------------|--------------|
+| claraschiltz@gmail.com | Hello@1234   |
+| lionel@bovy.dev        | Hello&123    |
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Exécution des tests E2E
+- Depuis le terminal, ouvrir le dossier racine du projet
+- Exécuter la commande `flutter test integration_test/`
+
+## Problème connu
+### Ajout d'une activité
+Lors de l'ajout d'une activité, il se peut que l'API ne réponde plus à cause de l'envoi de mails répétés. Ce problème survient lorsqu'on ajoute plusieurs activités dans période de temps relativement courte.
