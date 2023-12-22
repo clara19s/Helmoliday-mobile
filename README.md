@@ -2,7 +2,6 @@
 
 Projet du cours d'architectures logicielles et du cours de frameworks web (année académique 2023-2024) réalisé par Clara SCHILTZ et Lionel BOVY.
 
-Lien vers le projet en production : [https://panoramix.cg.helmo.be/~q210266](https://panoramix.cg.helmo.be/~q210266)
 
 **⚠️ Activer la connexion VPN de HELMo**
 
