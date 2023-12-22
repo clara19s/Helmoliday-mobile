@@ -18,7 +18,12 @@ Lien vers le projet en production : [https://panoramix.cg.helmo.be/~q210266](htt
 
 ## Exécution des tests E2E
 - Depuis le terminal, ouvrir le dossier racine du projet
-- Exécuter la commande `flutter test integration_test/`
+- Exécuter les commandes suivantes :
+```bash
+flutter test integration_test/login_test.dart
+flutter test integration_test/holiday_test.dart
+flutter test integration_test/register_test.dart
+```
 
 ## Problème connu
 ### Ajout d'une activité

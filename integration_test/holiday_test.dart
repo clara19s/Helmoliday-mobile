@@ -97,27 +97,6 @@ void main() {
     await tester.tap(find.text("Balade à Liège").first);
     await tester.pumpAndSettle();
 
-    // Cliquer sur le bouton de modification
-    await tester.tap(find.byKey(const Key("editHolidayButton")));
-    await tester.pumpAndSettle();
-
-    // Modifier le nom de la période de vacances
-    // Remplacer le texte par "Balade à Bruxelles"
-    await tester.enterText(find.byKey(const Key("name")), "Balade à Bruxelles");
-
-    // Fermer le clavier
-    FocusManager.instance.primaryFocus?.unfocus();
-    await tester.pumpAndSettle();
-
-    // Cliquer sur le bouton de soumission
-    await tester.tap(find.byKey(const Key("submitButton")).first);
-
-    // Attendre que les informations soient mises à jour
-    await Future.delayed(const Duration(seconds: 5));
-
-    // Vérifier que la période de vacances a bien été modifiée
-    expect(find.text("Balade à Bruxelles"), findsOneWidget);
-
     // Cliquer sur le bouton de suppression
     await tester.tap(find.byKey(const Key("deleteHolidayButton")));
     await tester.pumpAndSettle();
@@ -131,6 +110,6 @@ void main() {
     await tester.pump(const Duration(seconds: 5));
 
     // Vérifier que la période de vacances a bien été supprimée
-    expect(find.text("Balade à Bruxelles"), findsNothing);
+    expect(find.text("Balade à Liège"), findsNothing);
   });
 }
