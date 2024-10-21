@@ -2,12 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:helmoliday/model/lat_lng.dart' as helmoliday;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../service/location_service.dart';
 
 class LocationServiceImpl implements LocationService {
   final Dio _dio = Dio();
-  final String googleApiKey = "AIzaSyBxNqfMwgcI1mLNSV-o9qqsDwaygyaRJqk";
+  final String googleApiKey = dotenv.env['GOOGLE_API'];
 
   Future<LocationServiceStatus> _checkPermission() async {
     if (!await Geolocator.isLocationServiceEnabled()) {
