@@ -18,14 +18,17 @@ import 'infrastructure/repository/activity_repository_impl.dart';
 import 'infrastructure/repository/holiday_repository_impl.dart';
 import 'infrastructure/service/fluttertoast_service.dart';
 
-void main() {
+future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
+ 
   final NavigationService navigationService = NavigationService();
   final apiService = ApiServiceImpl();
   final authRepository = AuthRepositoryImpl(apiService);
   final holidayRepository = HolidayRepositoryImpl(apiService);
   final toastService = FluttertoastService();
   final theme = HelmolidayTheme.light();
+  
 
   HttpOverrides.global = MyHttpOverrides();
 
