@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:helmoliday/service/api_service.dart';
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../service/messaging_service.dart';
 
@@ -11,7 +12,7 @@ class PusherMessagingService implements IMessagingService {
       StreamController<Message>.broadcast();
   final ApiService _apiService;
   final PusherChannelsFlutter pusher = PusherChannelsFlutter.getInstance();
-  final _apiKey = "c79fa94e85416eeb4f1e";
+  final _apiKey = dotenv.env['PUSHER_API'];
   final _cluster = "eu";
   String? _channelName;
   PusherChannel? _channel;
